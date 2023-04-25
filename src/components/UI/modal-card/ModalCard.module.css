@@ -1,0 +1,44 @@
+
+.modalCard {
+    /* border: 1px solid black; */
+    border-radius: 16px;
+    box-shadow: 1px 1px 10px black;
+    padding: 24px;
+    padding-bottom: 48px;
+    max-width: 480px;
+    margin: auto;
+    position: relative;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+
+.modalCard object {
+    color: black;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+}
+
+.modalCard form {
+    display: flex;
+    flex-direction: column;
+    /* border: 1px solid black; */
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+.modalCard form label {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.modalCard form label input {
+    width: 98.2%;
+}
+
+.modalCard button {
+    margin-top: 4px;
+}
