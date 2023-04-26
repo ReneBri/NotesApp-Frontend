@@ -1,6 +1,7 @@
 
 .modalCard {
     /* border: 1px solid black; */
+    background-color: white;
     border-radius: 16px;
     box-shadow: 1px 1px 10px black;
     padding: 24px;
