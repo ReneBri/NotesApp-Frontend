@@ -7,7 +7,7 @@ const initialSignupState = {
     signupError: null
 }
 
-const reduceSignupState = (action, state) => {
+const reduceSignupState = (state, action) => {
     switch (action.type) {
         case 'ATTEMPT_SIGNUP':
             return { signupIsPending: true, signupError: null };
@@ -36,12 +36,13 @@ export const useSignupWithEmailAndPassword = () => {
         try{
             console.log(2);
             const userCredential = await firebaseAuth.createUserWithEmailAndPassword(email, password);
-            dispatchAuthState({ type: 'SIGNUP', payload: userCredential });
+            dispatchAuthState({ type: 'SIGNUP', payload: userCredential.user });
             const userObject = {
                 firstName,
                 uid: userCredential.user.uid
             }
             if(!isCancelled){
+                console.log(8);
                 dispatchSignupState({type: 'SIGNUP_COMPLETE'});
             }
             
@@ -55,9 +56,9 @@ export const useSignupWithEmailAndPassword = () => {
         }
         
     }
-    // useEffect(() => {
-    //     return () => setIsCancelled(true);
-    // }, []);
+    useEffect(() => {
+        return () => setIsCancelled(true);
+    }, []);
 
     return { signupState, signupWithEmailAndPassword }
 }

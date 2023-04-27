@@ -3,18 +3,17 @@ import ModalBackground from '../UI/modal-background/ModalBackground';
 import { useEffect, useReducer, useState } from 'react';
 import { useSignupWithEmailAndPassword } from '../../hooks/useSignupWithEmailAndPassword';
 
-
 let signupButtonClicked = false;
 
 const initialInputFormState = {
     firstName: '',
-    firstNameIsValid: null,
+    firstNameIsValid: false,
     email: '',
-    emailIsValid: null,
-    PasswordOne: '',
-    passwordOneIsValid: null,
+    emailIsValid: false,
+    passwordOne: '',
+    passwordOneIsValid: false,
     passwordTwo: '',
-    passwordTwoIsValid: null
+    passwordTwoIsValid: false
 }
 
 const handleValidateFirstName = (firstName) => {
@@ -33,36 +32,52 @@ const handleValidateEmail = (email) => {
     }
 }
 
+const handleValidatePasswordOne = (password) => {
+    if (password.length > 5){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+const handleValidatePasswordTwo = (passwordOne, passwordTwo) => {
+    if (passwordOne.length === 0 || passwordTwo.length === 0){
+        return false;
+    }
+    if (passwordOne === passwordTwo){
+        return true;
+    }else{
+        return false;
+    }
+}
+
 // still need to create a password check and validation!
 const inputFormReducer = (state, action) => {
+    console.log(state, action.payload)
     switch (action.type) {
 
         case ('CHANGE_FIRSTNAME_VALUE'):
-            console.log(action.payload);
             if(signupButtonClicked){
                 return { ...state, firstName: action.payload, firstNameIsValid: handleValidateFirstName(action.payload) };
             }
-            console.log(action.payload);
             return {...state, firstName: action.payload};
 
         case 'CHANGE_EMAIL_VALUE':
-            console.log(action.payload);
             if(signupButtonClicked){
                 return { ...state, email: action.payload, emailIsValid: handleValidateEmail(action.payload) };
             }
             return {...state, email: action.payload};
 
         case 'CHANGE_PASSWORD_ONE_VALUE':
-            console.log(action.payload);
             if(signupButtonClicked){
-                return { ...state, passwordOne: action.payload };
+                return { ...state, passwordOne: action.payload, passwordOneIsValid: handleValidatePasswordOne(action.payload) };
             }
             return {...state, passwordOne: action.payload};
 
         case 'CHANGE_PASSWORD_TWO_VALUE':
             console.log(action.payload);
             if(signupButtonClicked){
-                return { ...state, passwordTwo: action.payload };
+                return { ...state, passwordTwo: action.payload, passwordTwoIsValid: handleValidatePasswordTwo(state.passwordOne, action.payload) };
             }
             return { ...state, passwordTwo: action.payload };
 
@@ -78,32 +93,48 @@ const Signup = props => {
 
     const { signupState, signupWithEmailAndPassword } = useSignupWithEmailAndPassword();
 
+    console.log(signupState);
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        signupButtonClicked = true;
-        validateForm();
-        // signupWithEmailAndPassword('rene@rendawg.com', '123asdasd4', 'Rene');
+        if (!signupButtonClicked){
+            signupButtonClicked = true;
+        }
+        const formChecker = formIsValid();
+        if(formChecker){
+            signupWithEmailAndPassword(inputFormState.email, inputFormState.passwordOne, 'Rene');
+        }
+        
         console.log('ive been clicked');
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const validateForm = () => {
+    const formIsValid = () => {
         if(signupButtonClicked){
             if(!inputFormState.firstNameIsValid){
                 setInputErrorMessage('Name must only contain alphabetic characters and be 5 or more letters.');
-                return
+                return false;
             }else if(!inputFormState.emailIsValid){
                 setInputErrorMessage('Must be a valid email address.');
-                return;
+                return false;
+            }else if(!inputFormState.passwordOneIsValid){
+                setInputErrorMessage('Password must be 6 or more characters long.');
+                return false;
+            }else if(!inputFormState.passwordTwoIsValid){
+                setInputErrorMessage('Passwords must match.');
+                return false;
             }else{
                 setInputErrorMessage(null);
+                return true;
             }
         }
     }
 
     useEffect(() => {
-        validateForm()
-    }, [inputFormState])
+        if(signupButtonClicked){
+            formIsValid();
+        }
+    }, [inputFormState, formIsValid])
 
     return (
         <ModalBackground>
@@ -159,9 +190,10 @@ const Signup = props => {
                         />
                     </label>
                     
-                    <button>Create Account!</button>
+                    {!signupState.signupIsPending ? <button>Create Account!</button> : <button disabled>Creating Account...</button>}
                 </form>
 
+                {signupState.signupError ? ( <p>{signupState.signupError}</p> ) : (<div></div>)}
                 {inputErrorMessage && ( <p>{inputErrorMessage}</p> )}
 
             </ModalCard>
