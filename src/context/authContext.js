@@ -6,10 +6,14 @@ export const AuthContext = React.createContext();
 const authStateReducer = (state, action) => {
     switch (action.type) {
         case 'AUTH_STATE_IS_READY':
-            return {user: action.payload, authIsReady: true };
+            return { user: action.payload, authIsReady: true };
         case 'SIGNUP':
-            return {...state, user: action.payload };
-        default: return {...state};
+            return { ...state, user: action.payload };
+        case 'LOGOUT':
+            return { ...state, user: null }
+        case 'LOGIN':
+            return { ...state, user: action.payload };
+        default: return { ...state };
     }
 }
 

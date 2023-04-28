@@ -1,4 +1,4 @@
-import React, { useReducer, useContext, useState, useEffect  } from 'react';
+import { useReducer, useContext, useState, useEffect  } from 'react';
 import firebaseAuth from '../config/firebaseConfig';
 import { AuthContext } from '../context/authContext';
 
@@ -29,12 +29,10 @@ export const useSignupWithEmailAndPassword = () => {
 
     const signupWithEmailAndPassword = async (email, password, firstName) => {
 
-        console.log(1);
         setIsCancelled(false);
         dispatchSignupState({type: 'ATTEMPT_SIGNUP'});
     
         try{
-            console.log(2);
             const userCredential = await firebaseAuth.createUserWithEmailAndPassword(email, password);
             dispatchAuthState({ type: 'SIGNUP', payload: userCredential.user });
             const userObject = {
@@ -42,14 +40,12 @@ export const useSignupWithEmailAndPassword = () => {
                 uid: userCredential.user.uid
             }
             if(!isCancelled){
-                console.log(8);
                 dispatchSignupState({type: 'SIGNUP_COMPLETE'});
             }
             
         }catch(err){
             console.log(5);
             if(!isCancelled){
-                console.log(err)
                 dispatchSignupState({type: 'SIGNUP_ERROR', payload: err.message});
             }
             

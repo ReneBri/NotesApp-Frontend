@@ -6,6 +6,7 @@ import Home from './pages/home/Home';
 
 import firebaseAuth from './config/firebaseConfig';
 import Signup from './components/sign-up/Signup';
+import Login from './components/login/Login';
 
 function App() {
 
