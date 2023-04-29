@@ -1,7 +1,8 @@
-import { useState, useReducer, useEffect } from 'react';
+import { useState, useReducer, useEffect, useContext } from 'react';
 
 import ModalBackground from '../../UI/modal-background/ModalBackground';
 import ModalCard from '../../UI/modal-card/ModalCard';
+import { ModalContext } from '../../../context/modalContext';
 
 import { useLoginWithEmailAndPassword } from '../../../hooks/useLoginWithEmailAndPassword';
 import { useLogout } from '../../../hooks/useLogout';
@@ -57,19 +58,23 @@ const Login = props => {
     const [inputErrorMessage, setInputErrorMessage] = useState(null);
     const [loginButtonClicked, setLoginButtonClicked] = useState(false)
 
+    const { setModalState } = useContext(ModalContext);
+
     const { login, loginState } = useLoginWithEmailAndPassword();
     const { logout } = useLogout();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!loginButtonClicked){
             setLoginButtonClicked(true);
         }
         const formChecker = formIsValid();
         if(formChecker){
-            login(inputFormState.email, inputFormState.password);
+            await login(inputFormState.email, inputFormState.password);
+            setModalState(null);
         }
     }
+
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const formIsValid = () => {

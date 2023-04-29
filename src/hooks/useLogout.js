@@ -28,14 +28,13 @@ export const useLogout = () => {
     const { user, dispatchAuthState } = useContext(AuthContext);
 
     const logout = async () => {
-            console.log(1, user, logoutState);
             dispatchLogout({ type: 'ATTEMPT_LOGOUT' });
     
             try {
                 await firebaseAuth.signOut();
 
                 dispatchAuthState({ type: 'LOGOUT', payload: null });
-                console.log(2, user, logoutState);
+
                 if (!isCancelled) {
                     dispatchLogout({ type: 'LOGOUT_COMPLETE' });
                 }
@@ -43,7 +42,7 @@ export const useLogout = () => {
             catch (err) {
                 if (!isCancelled){
                     dispatchLogout({ type: 'LOGOUT_COMPLETE', payload: err.message});
-                    console.log(3, user, logoutState);
+
                 }
             }
         

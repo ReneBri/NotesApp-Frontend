@@ -12,9 +12,9 @@ const reduceSignupState = (state, action) => {
         case 'ATTEMPT_SIGNUP':
             return { signupIsPending: true, signupError: null };
         case 'SIGNUP_COMPLETE':
-            return { signupIsPending: false, signupError: null };
+            return { signupIsPending: true, signupError: 'We have sent you an email. Please go to it to verify your email address.', signupSuccess: true };
         case 'SIGNUP_ERROR':
-            return { signupIsPending: false, signupError: action.payload };
+            return { signupIsPending: false, signupError: action.payload, signupSuccess: false };
         default: 
             return state;
     }
@@ -34,17 +34,22 @@ export const useSignupWithEmailAndPassword = () => {
     
         try{
             const userCredential = await firebaseAuth.createUserWithEmailAndPassword(email, password);
-            dispatchAuthState({ type: 'SIGNUP', payload: userCredential.user });
-            const userObject = {
-                firstName,
-                uid: userCredential.user.uid
-            }
+            await firebaseAuth.currentUser.updateProfile({
+                displayName: firstName
+            });
+            await firebaseAuth.currentUser.sendEmailVerification();
+            
+            // const userObject = {
+            //     firstName,
+            //     uid: userCredential.user.uid
+            // }
+
             if(!isCancelled){
+                dispatchAuthState({ type: 'SIGNUP', payload: userCredential.user });
                 dispatchSignupState({type: 'SIGNUP_COMPLETE'});
             }
             
         }catch(err){
-            console.log(5);
             if(!isCancelled){
                 dispatchSignupState({type: 'SIGNUP_ERROR', payload: err.message});
             }

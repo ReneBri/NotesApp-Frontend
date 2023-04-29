@@ -1,8 +1,10 @@
 import ModalCard from '../../UI/modal-card/ModalCard';
 import ModalBackground from '../../UI/modal-background/ModalBackground';
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer, useState, useContext } from 'react';
 import { useSignupWithEmailAndPassword } from '../../../hooks/useSignupWithEmailAndPassword';
 import { useLogout } from '../../../hooks/useLogout';
+import { ModalContext } from '../../../context/modalContext';
+import Login from '../login/Login';
 
 
 const initialInputFormState = {
@@ -80,22 +82,24 @@ const Signup = props => {
 
     const [inputErrorMessage, setInputErrorMessage] = useState(null);
     const [signupButtonClicked, setSignupButtonClicked] = useState(false);
+    const [inputsDisabled, setInputsDisabled] = useState(false);
 
     const { signupState, signupWithEmailAndPassword } = useSignupWithEmailAndPassword();
 
     const { logout } = useLogout();
 
-    const handleSubmit = (e) => {
+    const { setModalState } = useContext(ModalContext);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!signupButtonClicked){
             setSignupButtonClicked(true);
         }
         const formChecker = formIsValid();
         if(formChecker){
-            signupWithEmailAndPassword(inputFormState.email, inputFormState.passwordOne, 'Rene');
+            await signupWithEmailAndPassword(inputFormState.email, inputFormState.passwordOne, 'Rene');
+            logout();
         }
-        
-        console.log('ive been clicked');
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -122,6 +126,14 @@ const Signup = props => {
             formIsValid();
     }, [inputFormState, formIsValid])
 
+    useEffect(() => {
+        if(signupState.signupSuccess === true || signupState.signupIsPending === true){
+            setInputsDisabled(true);
+        }else{
+            setInputsDisabled(false);
+        }
+    }, [signupState.signupSuccess, signupState.signupIsPending])
+
     return (
         <>
             <ModalBackground />
@@ -133,6 +145,7 @@ const Signup = props => {
                         <span>*First Name:</span>
                         <input 
                             type='text' 
+                            disabled={inputsDisabled}
                             value={inputFormState.firstName}
                             onChange={(e) => dispatchInputFormState({
                                 type: 'CHANGE_FIRSTNAME_VALUE',
@@ -145,6 +158,7 @@ const Signup = props => {
                         <span>*Email:</span>
                         <input 
                             type='text'
+                            disabled={inputsDisabled}
                             value={inputFormState.email}
                             onChange={(e) => dispatchInputFormState({ 
                                     type: 'CHANGE_EMAIL_VALUE', 
@@ -157,6 +171,7 @@ const Signup = props => {
                         <span>*Password:</span>
                         <input 
                             type='password'
+                            disabled={inputsDisabled}
                             value={inputFormState.passwordOne}
                             onChange={(e) => dispatchInputFormState({ 
                                 type: 'CHANGE_PASSWORD_ONE_VALUE', 
@@ -169,6 +184,7 @@ const Signup = props => {
                         <span>*Confirm Password:</span>
                         <input 
                             type='password'
+                            disabled={inputsDisabled}
                             value={inputFormState.passwordTwo}
                             onChange={(e) => dispatchInputFormState({ 
                                 type: 'CHANGE_PASSWORD_TWO_VALUE', 
@@ -183,7 +199,7 @@ const Signup = props => {
                 {signupState.signupError ? ( <p>{signupState.signupError}</p> ) : (<div></div>)}
                 {signupButtonClicked && inputErrorMessage && ( <p>{inputErrorMessage}</p> )}
 
-                <button onClick={logout}>Logout</button>
+                {signupState.signupSuccess && <button onClick={() => setModalState(<Login />)}>Go to Login</button>}
 
             </ModalCard>
         </>

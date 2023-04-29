@@ -17,12 +17,6 @@ const ModalCard = props => {
                 onClick={() => {setModalState(null)}} 
                 alt='Exit the modal here'
             />
-            {/* <object 
-                data="/icons/close.svg" 
-                width="24" 
-                height="24"
-                onClick={() => {setModalContext(null)}}
-            > </object> */}
             {props.children}
         </div>
     )
