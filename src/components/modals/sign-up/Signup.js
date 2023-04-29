@@ -1,8 +1,8 @@
-import ModalCard from '../UI/modal-card/ModalCard';
-import ModalBackground from '../UI/modal-background/ModalBackground';
+import ModalCard from '../../UI/modal-card/ModalCard';
+import ModalBackground from '../../UI/modal-background/ModalBackground';
 import { useEffect, useReducer, useState } from 'react';
-import { useSignupWithEmailAndPassword } from '../../hooks/useSignupWithEmailAndPassword';
-import { useLogout } from '../../hooks/useLogout';
+import { useSignupWithEmailAndPassword } from '../../../hooks/useSignupWithEmailAndPassword';
+import { useLogout } from '../../../hooks/useLogout';
 
 
 const initialInputFormState = {
@@ -123,7 +123,8 @@ const Signup = props => {
     }, [inputFormState, formIsValid])
 
     return (
-        <ModalBackground>
+        <>
+            <ModalBackground />
             <ModalCard>
                 <h3>Sign-up with Email & Password</h3>
                 <form onSubmit={handleSubmit}>
@@ -185,7 +186,7 @@ const Signup = props => {
                 <button onClick={logout}>Logout</button>
 
             </ModalCard>
-        </ModalBackground>
+        </>
     )
 }
 

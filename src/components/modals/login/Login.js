@@ -1,10 +1,10 @@
 import { useState, useReducer, useEffect } from 'react';
 
-import ModalBackground from '../UI/modal-background/ModalBackground';
-import ModalCard from '../UI/modal-card/ModalCard';
+import ModalBackground from '../../UI/modal-background/ModalBackground';
+import ModalCard from '../../UI/modal-card/ModalCard';
 
-import { useLoginWithEmailAndPassword } from '../../hooks/useLoginWithEmailAndPassword';
-import { useLogout } from '../../hooks/useLogout';
+import { useLoginWithEmailAndPassword } from '../../../hooks/useLoginWithEmailAndPassword';
+import { useLogout } from '../../../hooks/useLogout';
 
 
 const initialInputFormState = {
@@ -69,8 +69,6 @@ const Login = props => {
         if(formChecker){
             login(inputFormState.email, inputFormState.password);
         }
-        
-        console.log('ive been clicked');
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -92,7 +90,8 @@ const Login = props => {
     }, [inputFormState, formIsValid])
 
     return (
-        <ModalBackground>
+        <>
+            <ModalBackground />
             <ModalCard>
                 <h3>Login with Email & Password</h3>
                 <form onSubmit={handleSubmit}>
@@ -103,8 +102,8 @@ const Login = props => {
                             type='text'
                             value={inputFormState.email}
                             onChange={(e) => dispatchInputFormState({ 
-                                    type: 'CHANGE_EMAIL_VALUE', 
-                                    payload: e.target.value 
+                                type: 'CHANGE_EMAIL_VALUE', 
+                                payload: e.target.value 
                             })}  
                         />
                     </label>
@@ -130,7 +129,8 @@ const Login = props => {
                 <button onClick={logout}>Logout</button>
 
             </ModalCard>
-        </ModalBackground>
+    
+        </>
     )
 }
 

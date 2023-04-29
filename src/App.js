@@ -5,8 +5,8 @@ import Dashboard from './pages/dashboard/Dashboard';
 import Home from './pages/home/Home';
 
 import firebaseAuth from './config/firebaseConfig';
-import Signup from './components/sign-up/Signup';
-import Login from './components/login/Login';
+import Signup from './components/modals/sign-up/Signup';
+import Login from './components/modals/login/Login';
 
 function App() {
 
@@ -16,7 +16,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Signup />} />
+          <Route path="/" element={<Home />} />
         </Routes>
       </BrowserRouter>
     </div>
