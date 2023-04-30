@@ -1,8 +1,16 @@
+// styles
 import styles from './ModalBackground.module.css';
 
+// config
+
+// context
 import { ModalContext } from '../../../context/modalContext';
 
+// hooks
 import { useContext } from 'react';
+
+// components
+
 
 const ModalBackground = props => {
 

@@ -1,10 +1,17 @@
+// styles
 import styles from './ModalCard.module.css';
+import exitIcon from '../../../media/icons/close.svg';
 
+// config
+
+// context
+import { useContext } from 'react';
 import { ModalContext } from '../../../context/modalContext';
 
-import { useContext } from 'react';
+// hooks
 
-import exitIcon from '../../../media/icons/close.svg';
+// components
+
 
 const ModalCard = props => {
 

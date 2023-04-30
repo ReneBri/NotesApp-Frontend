@@ -1,9 +1,21 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+// styles
 import './index.css';
-import App from './App';
+
+// config
+
+// context
 import { AuthContextProvider } from './context/authContext';
 import ModalContextProvider from './context/modalContext';
+
+// hooks
+import React from 'react';
+
+// routes & other
+import ReactDOM from 'react-dom/client';
+
+// components
+import App from './App';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

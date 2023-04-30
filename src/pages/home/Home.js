@@ -1,8 +1,17 @@
-import { ModalContext } from "../../context/modalContext";
-import { useContext, useEffect, useState } from "react";
+// styles
 
+// config
+
+// context
+import { ModalContext } from "../../context/modalContext";
+
+// hooks
+import { useContext } from "react";
+
+// components
 import Login from "../../components/modals/login/Login";
 import Signup from "../../components/modals/sign-up/Signup";
+
 
 const Home = props => {
 

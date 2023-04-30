@@ -1,9 +1,16 @@
-import ModalCard from '../../UI/modal-card/ModalCard';
-import ModalBackground from '../../UI/modal-background/ModalBackground';
+// styles
+
+// context
+import { ModalContext } from '../../../context/modalContext';
+
+// hooks
 import { useEffect, useReducer, useState, useContext } from 'react';
 import { useSignupWithEmailAndPassword } from '../../../hooks/useSignupWithEmailAndPassword';
 import { useLogout } from '../../../hooks/useLogout';
-import { ModalContext } from '../../../context/modalContext';
+
+// components
+import ModalCard from '../../UI/modal-card/ModalCard';
+import ModalBackground from '../../UI/modal-background/ModalBackground';
 import Login from '../login/Login';
 
 

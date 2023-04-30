@@ -1,11 +1,14 @@
-import { useState, useReducer, useEffect, useContext } from 'react';
-
-import ModalBackground from '../../UI/modal-background/ModalBackground';
-import ModalCard from '../../UI/modal-card/ModalCard';
+// context
 import { ModalContext } from '../../../context/modalContext';
 
+// hooks
+import { useState, useReducer, useEffect, useContext } from 'react';
 import { useLoginWithEmailAndPassword } from '../../../hooks/useLoginWithEmailAndPassword';
 import { useLogout } from '../../../hooks/useLogout';
+
+// components
+import ModalBackground from '../../UI/modal-background/ModalBackground';
+import ModalCard from '../../UI/modal-card/ModalCard';
 
 
 const initialInputFormState = {

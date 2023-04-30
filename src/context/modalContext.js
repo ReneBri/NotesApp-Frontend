@@ -1,4 +1,15 @@
+// styles
+
+// config
+
+// context
+
+// hooks
 import React, { useState } from 'react';
+
+// components
+
+
 
 const initialModalContext = {
     modalName: null

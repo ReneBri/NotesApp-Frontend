@@ -1,5 +1,16 @@
-import React, { useEffect, useReducer } from 'react';
+// styles
+
+// config
 import firebaseAuth from '../config/firebaseConfig';
+
+// context
+
+// hooks
+import React, { useEffect, useReducer } from 'react';
+
+// components
+
+
 
 export const AuthContext = React.createContext();
 

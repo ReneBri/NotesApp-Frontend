@@ -1,18 +1,21 @@
-import Login from "../login/Login";
+// styles
 
-import Signup from "../sign-up/Signup";
-
-import { ModalContext } from "../../../context/modalContext";
-
-import { useContext } from "react";
-
+// config
 import firebaseAuth from "../../../config/firebaseConfig";
 
-import ModalBackground from "../../UI/modal-background/ModalBackground";
+// context
+import { ModalContext } from "../../../context/modalContext";
+import { AuthContext } from "../../../context/authContext";
 
+// hooks
+import { useContext } from "react";
+
+// components
+import Login from "../login/Login";
+import Signup from "../sign-up/Signup";
+import ModalBackground from "../../UI/modal-background/ModalBackground";
 import ModalCard from "../../UI/modal-card/ModalCard";
 
-import { AuthContext } from "../../../context/authContext";
 
 const UnverifiedEmail = props => {
 
