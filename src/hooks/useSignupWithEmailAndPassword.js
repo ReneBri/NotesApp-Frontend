@@ -50,6 +50,7 @@ export const useSignupWithEmailAndPassword = () => {
         try{
             // Create user in Firebase database
             const userCredential = await firebaseAuth.createUserWithEmailAndPassword(email, password);
+
             // Once created update the users profile displayName value
             await firebaseAuth.currentUser.updateProfile({
                 displayName: firstName
@@ -63,14 +64,14 @@ export const useSignupWithEmailAndPassword = () => {
             //     uid: userCredential.user.uid
             // }
 
-            // Re-update state and authContext only if not unmounted
+            // Re-update state and authContext only if still mounted
             if(!isCancelled){
                 dispatchAuthState({ type: 'SIGNUP', payload: userCredential.user });
                 dispatchSignupState({type: 'SIGNUP_COMPLETE'});
             }
             
         }catch(err){
-            // Re-update state only if not unmounted
+            // Re-update state only if still mounted
             if(!isCancelled){
                 dispatchSignupState({type: 'SIGNUP_ERROR', payload: err.message});
             }

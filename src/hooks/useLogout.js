@@ -33,36 +33,42 @@ export const useLogout = () => {
 
     const [logoutState, dispatchLogout] = useReducer(reduceLogout, initialLogoutState);
 
+    // Saftey measure for unmounting. setIsCancelled is used in the useEffect clean-up function below
     const [isCancelled, setIsCancelled] = useState(false);
 
-    const { user, dispatchAuthState } = useContext(AuthContext);
+    // This is so we can update the React state
+    const { dispatchAuthState } = useContext(AuthContext);
 
+    // Main exported function we use for logout
     const logout = async () => {
+
             dispatchLogout({ type: 'ATTEMPT_LOGOUT' });
     
             try {
+                // Signout user from Firebase 
                 await firebaseAuth.signOut();
 
                 dispatchAuthState({ type: 'LOGOUT', payload: null });
 
+                // Re-update state and authContext only if still mounted
                 if (!isCancelled) {
                     dispatchLogout({ type: 'LOGOUT_COMPLETE' });
                 }
             }
             catch (err) {
+                // Re-update state and authContext only if still mounted
                 if (!isCancelled){
                     dispatchLogout({ type: 'LOGOUT_COMPLETE', payload: err.message});
-
                 }
             }
-        
     }
 
-    // cleanup function
+    // Clean-up function for unmounting
     useEffect(() => {
         return () => {setIsCancelled(true)}
     }, [])
 
+    // Return object
     return { logout, logoutState };
     
 }
