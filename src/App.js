@@ -18,6 +18,7 @@ import { useContext } from 'react';
 import Dashboard from './pages/dashboard/Dashboard';
 import Home from './pages/home/Home';
 import UnverifiedEmail from './components/modals/unverified-email/UnverifiedEmail';
+import Navbar from './components/UI/navbar/Navbar';
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
       {!modalState && user.user !== null && !user.user.emailVerified && ReactDOM.createPortal(<UnverifiedEmail />, document.getElementById('modal-root'))}
 
       <BrowserRouter>
+      <Navbar />
         <Routes>
           <Route path="/" element={ !user.user ? <Home /> : <Dashboard /> } />
         </Routes>
