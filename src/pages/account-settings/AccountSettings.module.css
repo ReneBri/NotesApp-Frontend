@@ -1,0 +1,64 @@
+
+.account-settings-page {
+    display: flex;
+    border: 1px solid pink;
+    height: 80vh;
+}
+
+.account-settings-content {
+    padding: 20px 24px 24px 24px;
+    text-align: left;
+    flex: 1 0 300px;
+}
+
+.account-settings-content h2 {
+    margin: 0 0 14px 0;
+}
+
+.info-wrapper {
+    /* border: 1px solid black; */
+    padding: 8px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    max-width: 300px;
+}
+
+.info-wrapper label {
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: rgba(0,0,0,0.45);
+}
+
+.info-wrapper p {
+    margin: 8px 0;
+}
+
+.info-wrapper input {
+    margin: 8px 0 5.5px 0;
+    border: none;
+    font-size: 1em;
+    border-bottom: 1px solid blue;
+}
+
+.info-wrapper input:focus {
+    outline: none;
+}
+
+.info-wrapper button {
+    padding: 3px 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: .5s;
+}
+
+.info-wrapper button:hover {
+    color: rgba(0,0,0,0.45);
+    transition: .3s;
+}
+
+.info-label-wrapper {
+    display: flex;
+    flex-direction: column;
+}

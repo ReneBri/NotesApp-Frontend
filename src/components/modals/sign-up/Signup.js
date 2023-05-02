@@ -68,7 +68,6 @@ const inputFormReducer = (state, action) => {
 
         case ('CHANGE_FIRSTNAME_VALUE'):
                 return { ...state, firstName: action.payload, firstNameIsValid: handleValidateFirstName(action.payload) };
-  
 
         case 'CHANGE_EMAIL_VALUE':
                 return { ...state, email: action.payload, emailIsValid: handleValidateEmail(action.payload) };
@@ -112,7 +111,7 @@ const Signup = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const formIsValid = () => {
             if(!inputFormState.firstNameIsValid){
-                setInputErrorMessage('Name must only contain alphabetic characters and be at least 1 letter long.');
+                setInputErrorMessage('Name must only contain alphabetic characters and be between 1 & 15 letters long.');
                 return false;
             }else if(!inputFormState.emailIsValid){
                 setInputErrorMessage('Must be a valid email address.');
