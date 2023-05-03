@@ -2,7 +2,7 @@
 import './App.css';
 
 // routes & other
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import ReactDOM from 'react-dom';
 
 // config
@@ -45,7 +45,7 @@ function App() {
         <Navbar />
           <Routes>
             <Route path="/" element={ !user.user ? <Home /> : <Dashboard /> } />
-            <Route path="/account-settings" element={ <AccountSettings /> } />
+            <Route path="/account-settings" element={ !user.user ? <Navigate replace to='/' /> : <AccountSettings /> } />
           </Routes>
         </BrowserRouter>
       )}
