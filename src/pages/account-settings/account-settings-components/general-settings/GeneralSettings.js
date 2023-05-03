@@ -1,66 +1,30 @@
-import { useState } from 'react';
+// styles
 import styles from '../../AccountSettings.module.css';
 
-import { useValidateUserInput } from '../../../../hooks/useValidateUserInput';
+// config
+
+// context
+
+// hooks
+import { useState } from 'react';
+
+// components
+import DisplayName from './display-name/DisplayName';
 
 
 const GeneralSettings = ({ displayName, email }) => {
 
+  // This links up to the id of the input
   const [infoToChange, setInfoToChange] = useState(null);
 
-  const [currentDisplayName, setCurrentDisplayName] = useState(displayName);
-
-  const { validateDisplayName, userInputErrorMessage }= useValidateUserInput();
-
-  const handleEditInformation = (section) => {
-    setInfoToChange(section);
-  }
-
-  const handleSaveNewDisplayName = (newDisplayName) => {
-    validateDisplayName(newDisplayName);
-    console.log(userInputErrorMessage);
-    if(!userInputErrorMessage){
-      handleEditInformation(null);
-    }
-  }
-
-
   return (
+
     <div className={styles['account-settings-content']}>
 
       <h2>General Settings</h2>
       
-      {infoToChange !== 'display-name' ? (
-        <div className={styles['info-wrapper']}>
-        <div className={styles['info-label-wrapper']}>
-          <label htmlFor='display-name'>Display Name:</label>
-          <p id='display-name'>{displayName}</p>
-        </div>
-        <button onClick={() => handleEditInformation('display-name')}>Edit</button>
-      </div>
-      ) : ( 
-        <div className={styles['info-wrapper']}>
-        <div className={styles['info-label-wrapper']}>
-          <label htmlFor='display-name'>Display Name:</label>
-          <input 
-            id='display-name'
-            type='text'
-            value={currentDisplayName}
-            onChange={(e) => setCurrentDisplayName(e.target.value)} 
-            autoFocus
-          />
-        </div>
-        <button onClick={() => handleSaveNewDisplayName(currentDisplayName)}>Save</button>
-        <button onClick={() => {
-            setCurrentDisplayName(displayName);
-            handleEditInformation(null)}
-            }
-          >Cancel
-        </button>
-      </div>
-      )}
+      <DisplayName infoToChange={infoToChange} setInfoToChange={setInfoToChange} displayName={displayName} />
       
-
       <div className={styles['info-wrapper']}>
         <div className={styles['info-label-wrapper']}>
           <label htmlFor='user-email'>Email:</label>

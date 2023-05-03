@@ -25,6 +25,8 @@ const authStateReducer = (state, action) => {
             return { ...state, user: null }
         case 'LOGIN':
             return { ...state, user: action.payload };
+        case 'UPDATE_DISPLAY_NAME':
+            return { ...state, user: { ...state.user, displayName: action.payload } };
         default: return { ...state };
     }
 }
@@ -48,6 +50,7 @@ export const AuthContextProvider = props => {
 
 
     return (
+        // to stop it from being user.user I just need to change it here from authState to authState.user
         <AuthContext.Provider value={{ user: authState, dispatchAuthState }}>
             {props.children}
         </AuthContext.Provider>
