@@ -15,6 +15,9 @@ import { useContext } from 'react';
 import Login from "../../modals/login/Login";
 import Signup from "../../modals/sign-up/Signup";
 
+// other
+import { Link } from "react-router-dom";
+
 
 const Navbar = props => {
 
@@ -25,29 +28,33 @@ const Navbar = props => {
     return (
         <nav className={styles.navbar}>
             <div className={styles['nav-content-wrapper']}>
-                <h3>Logo</h3>
+                <Link to='/'><h3>Logo</h3></Link>
                 <ul>
                     {!user.user && (
                         <>
-                        <li 
-                            className={styles['user-auth-link']}
-                            onClick={() => setModalState(<Signup />)}
-                        >Sign up
-                        </li>
-                        <li>|</li>
-                        <li 
-                            className={styles['user-auth-link']}
-                            onClick={() => setModalState(<Login />)}
-                            >Login
-                        </li>
+                            <li 
+                                className={styles['user-auth-link']}
+                                onClick={() => setModalState(<Signup />)}
+                                >Sign up
+                            </li>
+                            <li>|</li>
+                            <li 
+                                className={styles['user-auth-link']}
+                                onClick={() => setModalState(<Login />)}
+                                >Login
+                            </li>
                         </>
                     )}
                     {user.user && (
-                        <li 
-                            className={styles['user-auth-link']}
-                            onClick={logout}
-                            >Logout
-                        </li>
+                        <>
+                            <li><Link to='/account-settings'>Settings</Link></li>
+                            <li>|</li>
+                            <li 
+                                className={styles['user-auth-link']}
+                                onClick={logout}
+                                >Logout
+                            </li>
+                        </>
                     )}
                 </ul>
             </div>
