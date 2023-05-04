@@ -9,6 +9,7 @@ import { useLogout } from '../../../hooks/useLogout';
 // components
 import ModalBackground from '../../UI/modal-background/ModalBackground';
 import ModalCard from '../../UI/modal-card/ModalCard';
+import ForgottenPassword from '../forgotten-password/ForgottenPassword';
 
 
 const initialInputFormState = {
@@ -142,6 +143,8 @@ const Login = props => {
                 {loginButtonClicked && inputErrorMessage && ( <p>{inputErrorMessage}</p> )}
 
                 <button onClick={logout}>Logout</button>
+
+                <button onClick={() => setModalState(<ForgottenPassword />)}>Forgotten your password?</button>
 
             </ModalCard>
     

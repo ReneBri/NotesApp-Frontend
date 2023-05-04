@@ -26,7 +26,7 @@ const DisplayName = ({ infoToChange, setInfoToChange, displayName }) => {
   const reduceCurrentDisplayName = (state, action) => {
     switch(action.type){
       case 'UPDATE_CURRENT_DISPLAY_NAME':
-        return { currentDisplayName: action.payload, currentDisplayNameIsValid: validateDisplayName(action.payload) };
+        return { value: action.payload, isValid: validateDisplayName(action.payload) };
       default:
         return { ...state };
     }
@@ -34,15 +34,15 @@ const DisplayName = ({ infoToChange, setInfoToChange, displayName }) => {
 
   // State for the display name shown on the page which is linked to the input field
   const [currentDisplayNameState, dispatchCurrentDisplayName] = useReducer(reduceCurrentDisplayName, { 
-    currentDisplayName: displayName, 
-    currentDisplayNameIsValid: true
+    value: displayName, 
+    isValid: true
   });
 
   // Update the displayName property in the Firebase system
   const updateFirebaseDisplayName = async () => {
     try{
       await firebaseAuth.currentUser.updateProfile({
-        displayName: currentDisplayNameState.currentDisplayName
+        displayName: currentDisplayNameState.value
     });
     console.log('success');
     return;
@@ -56,12 +56,12 @@ const DisplayName = ({ infoToChange, setInfoToChange, displayName }) => {
   // Triggered when clicking the save button
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(currentDisplayNameState.currentDisplayNameIsValid){
+    if(currentDisplayNameState.isValid){
       updateFirebaseDisplayName();
       setInfoToChange(null);
       dispatchAuthState({ 
         type: 'UPDATE_DISPLAY_NAME', 
-        payload: currentDisplayNameState.currentDisplayName 
+        payload: currentDisplayNameState.value
       });
     }
   }
@@ -73,7 +73,7 @@ const DisplayName = ({ infoToChange, setInfoToChange, displayName }) => {
             <div className={styles['info-wrapper']}>
               <div className={styles['info-label-wrapper']}>
                   <label htmlFor='display-name'>Display Name:</label>
-                  <p id='display-name'>{currentDisplayNameState.currentDisplayName}</p>
+                  <p id='display-name'>{displayName}</p>
               </div>
               <button onClick={() => setInfoToChange('display-name')}>Edit</button>
             </div>
@@ -85,7 +85,7 @@ const DisplayName = ({ infoToChange, setInfoToChange, displayName }) => {
                 <input 
                     id='display-name'
                     type='text'
-                    value={currentDisplayNameState.currentDisplayName}
+                    value={currentDisplayNameState.value}
                     onChange={(e) => dispatchCurrentDisplayName({ 
                       type: 'UPDATE_CURRENT_DISPLAY_NAME', 
                       payload: e.target.value 
