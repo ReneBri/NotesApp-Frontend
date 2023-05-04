@@ -74,7 +74,9 @@ const Login = props => {
         const formChecker = formIsValid();
         if(formChecker){
             await login(inputFormState.email, inputFormState.password);
-            setModalState(null);
+            if(loginState.loginSuccess){
+                setModalState(null);
+            }
         }
     }
 
