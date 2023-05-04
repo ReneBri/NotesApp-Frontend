@@ -10,6 +10,7 @@ import { useState } from 'react';
 
 // components
 import DisplayName from './display-name/DisplayName';
+import Email from './email/Email';
 
 
 const GeneralSettings = ({ displayName, email }) => {
@@ -25,12 +26,7 @@ const GeneralSettings = ({ displayName, email }) => {
       
       <DisplayName infoToChange={infoToChange} setInfoToChange={setInfoToChange} displayName={displayName} />
       
-      <div className={styles['info-wrapper']}>
-        <div className={styles['info-label-wrapper']}>
-          <label htmlFor='user-email'>Email:</label>
-          <p id='user-email'>{email}</p>
-        </div>
-      </div>
+      <Email infoToChange={infoToChange} setInfoToChange={setInfoToChange} email={email} />
 
     </div>
   )

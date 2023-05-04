@@ -74,11 +74,15 @@ const Login = props => {
         const formChecker = formIsValid();
         if(formChecker){
             await login(inputFormState.email, inputFormState.password);
-            if(loginState.loginSuccess){
-                setModalState(null);
-            }
         }
     }
+
+    // Set this is a useEffect because when loggin in when unverified the login modal would not close
+    useEffect(() => {
+        if(loginState.loginSuccess){
+            setModalState(null);
+        }
+    }, [loginState.loginSuccess, setModalState])
 
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -103,6 +107,7 @@ const Login = props => {
         <>
             <ModalBackground />
             <ModalCard>
+
                 <h3>Login with Email & Password</h3>
                 <form onSubmit={handleSubmit}>
 

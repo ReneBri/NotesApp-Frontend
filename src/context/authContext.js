@@ -27,6 +27,8 @@ const authStateReducer = (state, action) => {
             return { ...state, user: action.payload };
         case 'UPDATE_DISPLAY_NAME':
             return { ...state, user: { ...state.user, displayName: action.payload } };
+        case 'UPDATE_EMAIL':
+            return { ...state, user: { ...state.user, email: action.payload } };
         default: return { ...state };
     }
 }

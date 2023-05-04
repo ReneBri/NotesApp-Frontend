@@ -15,5 +15,25 @@ export const useValidateUserInput = () => {
         }
     }
 
-    return { validateDisplayName, userInputErrorMessage }
+    const validateEmail = (userInput) => {
+        if (userInput.trim().match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g)){
+            setUserInputErrorMessage(null);
+            return true;
+        }else{
+            setUserInputErrorMessage('Must be a valid email address.')
+            return false;
+        }
+    }
+
+    const validatePassword = (userInput) => {
+        if (userInput.length !== 0){
+            setUserInputErrorMessage(null);
+            return true;
+        }else{
+            setUserInputErrorMessage('Please enter a password.')
+            return false;
+        }
+    }
+
+    return { validateDisplayName, validateEmail, validatePassword, userInputErrorMessage }
 }
