@@ -92,6 +92,7 @@ const ReauthenticateUser = props => {
                                 type: 'CHANGE_PASSWORD_VALUE', 
                                 payload: e.target.value 
                             })} 
+                            autoFocus
                         />
                     </label>
                     

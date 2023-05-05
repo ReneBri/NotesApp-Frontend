@@ -27,8 +27,6 @@ const Email = ({ infoToChange, setInfoToChange, email }) => {
     // This validates the newly chosen display name
     const { validateEmail, userInputErrorMessage } = useValidateUserInput();
 
-    const { reauthenticateUser, reauthState } = useReauthenticateUser();
-
     // Reducer for the user input
     const reduceCurrentEmail = (state, action) => {
         switch(action.type){
@@ -49,8 +47,6 @@ const Email = ({ infoToChange, setInfoToChange, email }) => {
     const updateFirebaseEmail = async () => {
         try{
             await firebaseAuth.currentUser.updateEmail(currentEmailState.value);
-            console.log('success');
-            return;
         }
         catch(err){
             console.log(err.message);
@@ -60,7 +56,6 @@ const Email = ({ infoToChange, setInfoToChange, email }) => {
 
     const unverifyEmail = async () => {
         try{
-
             await firebaseAuth.currentUser.updateProfile({
                 emailVerified: false
             });

@@ -7,14 +7,15 @@ import firebaseAuth from '../../config/firebaseConfig';
 
 
 // hooks
-import { useEffect, useState, useReducer, useContext } from 'react'
+import { useEffect, useState, useReducer} from 'react'
 
 // components
 
 
 const initialPasswordResetEmailState = {
-    reauthIsPending: null,
-    reauthError: null
+    isPending: null,
+    error: null,
+    success: null
 }
 
 const reducePasswordResetEmail = (state, action) => {

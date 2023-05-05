@@ -62,6 +62,7 @@ const ForgottenPassword = () => {
                 // props.onSuccessfulCompletion();
             }
             catch(err){
+                // pretty sure this throws the same error as passwordResetEmailState.error
                 setPasswordResetErrorMessage(err.message);
             }
             
@@ -92,6 +93,7 @@ const ForgottenPassword = () => {
                                 type: 'CHANGE_EMAIL_VALUE', 
                                 payload: e.target.value 
                             })} 
+                            autoFocus
                         />
                     </label>
                     
