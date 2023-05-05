@@ -1,3 +1,3 @@
 The frontend for my NotesApp idea.
 
-So far we can sign-up with email and password but we are not yet redirected to anywhere else.
+Login interface almost complete. Just need to clean up code, sweep for bugs and test.
