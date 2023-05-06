@@ -27,13 +27,10 @@ const ReauthenticateUser = props => {
     const inputFormReducer = (state, action) => {
 
         switch (action.type) {
-    
             case 'CHANGE_PASSWORD_VALUE':
                     return { ...state, password: action.payload, passwordIsValid: validatePassword(action.payload) };
-    
             case 'CHECK_PASSWORD_IS_VALID':
                 return { ...state, passwordIsValid: validatePassword(state.password) };
-    
             default: return { ...state };
         }
     }
@@ -43,7 +40,8 @@ const ReauthenticateUser = props => {
     const [inputFormState, dispatchInputFormState] = useReducer(inputFormReducer, initialInputFormState);
 
     const [reauthErrorMessage, setReauthErrorMessage] = useState(null);
-    const [reauthButtonClicked, setReauthButtonClicked] = useState(false)
+
+    const [reauthButtonClicked, setReauthButtonClicked] = useState(false);
 
     const { setModalState } = useContext(ModalContext);
 
@@ -56,6 +54,8 @@ const ReauthenticateUser = props => {
         }
         // const formChecker = formIsValid();
         if(inputFormState.passwordIsValid){
+            // Theres no catch block here because the error message is already caught in the reauthState
+            // Maybe we can just delete the catch here altogether?
             try{
                 await reauthenticateUser(inputFormState.password);
                 props.onSuccessfulCompletion();

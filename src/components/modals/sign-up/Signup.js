@@ -25,7 +25,7 @@ const initialInputFormState = {
     passwordTwoIsValid: false
 }
 
-// can these go inside of a hook to export??
+// CHANGE THESE TO A HOOK TO IMPORT
 const handleValidateFirstName = (firstName) => {
     if (firstName.trim().match(/^[A-Za-z]+$/) && firstName.trim().length > 0){
         return true;
@@ -65,35 +65,39 @@ const handleValidatePasswordTwo = (passwordOne, passwordTwo) => {
 const inputFormReducer = (state, action) => {
 
     switch (action.type) {
-
-        case ('CHANGE_FIRSTNAME_VALUE'):
+        case 'CHANGE_FIRSTNAME_VALUE':
                 return { ...state, firstName: action.payload, firstNameIsValid: handleValidateFirstName(action.payload) };
-
         case 'CHANGE_EMAIL_VALUE':
                 return { ...state, email: action.payload, emailIsValid: handleValidateEmail(action.payload) };
-
         case 'CHANGE_PASSWORD_ONE_VALUE':
                 return { ...state, passwordOne: action.payload, passwordOneIsValid: handleValidatePasswordOne(action.payload) };
-
         case 'CHANGE_PASSWORD_TWO_VALUE':
                 return { ...state, passwordTwo: action.payload, passwordTwoIsValid: handleValidatePasswordTwo(state.passwordOne, action.payload) };
-
         default: return { ...state };
     }
 }
 
 const Signup = props => {
 
+    // State for user input
     const [inputFormState, dispatchInputFormState] = useReducer(inputFormReducer, initialInputFormState);
 
+    // State to display input error message
     const [inputErrorMessage, setInputErrorMessage] = useState(null);
-    const [signupButtonClicked, setSignupButtonClicked] = useState(false);
-    const [inputsDisabled, setInputsDisabled] = useState(false);
 
+    // Only once the submit button is clicked React show the user input error message
+    const [signupButtonClicked, setSignupButtonClicked] = useState(false);
+
+    // Disables inputs after submit begins
+    const [inputIsDisabled, setInputIsDisabled] = useState(false);
+
+    // Signup hook
     const { signupState, signupWithEmailAndPassword } = useSignupWithEmailAndPassword();
 
+    // Logout hook
     const { logout } = useLogout();
 
+    // Modal context to set modal
     const { setModalState } = useContext(ModalContext);
 
     const handleSubmit = async (e) => {
@@ -101,6 +105,7 @@ const Signup = props => {
         if (!signupButtonClicked){
             setSignupButtonClicked(true);
         }
+        // Only if form meets all validity checks will the submit to Firebase trigger
         const formChecker = formIsValid();
         if(formChecker){
             await signupWithEmailAndPassword(inputFormState.email, inputFormState.passwordOne, 'Rene');
@@ -108,6 +113,7 @@ const Signup = props => {
         }
     }
 
+    // REPLACE WITH VALIDITY CHECKING HOOK!
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const formIsValid = () => {
             if(!inputFormState.firstNameIsValid){
@@ -128,17 +134,19 @@ const Signup = props => {
             }
     }
 
+    // Checks form validity on every change made to user input
     useEffect(() => {
             formIsValid();
     }, [inputFormState, formIsValid])
 
+    // Disables user inputs after button is clicked but allows users to alter the input fields should the signup fail
     useEffect(() => {
-        if(signupState.signupSuccess === true || signupState.signupIsPending === true){
-            setInputsDisabled(true);
+        if(signupState.success === true || signupState.isPending === true){
+            setInputIsDisabled(true);
         }else{
-            setInputsDisabled(false);
+            setInputIsDisabled(false);
         }
-    }, [signupState.signupSuccess, signupState.signupIsPending])
+    }, [signupState.success, signupState.isPending])
 
     return (
         <>
@@ -151,7 +159,7 @@ const Signup = props => {
                         <span>*First Name:</span>
                         <input 
                             type='text' 
-                            disabled={inputsDisabled}
+                            disabled={inputIsDisabled}
                             value={inputFormState.firstName}
                             onChange={(e) => dispatchInputFormState({
                                 type: 'CHANGE_FIRSTNAME_VALUE',
@@ -164,7 +172,7 @@ const Signup = props => {
                         <span>*Email:</span>
                         <input 
                             type='text'
-                            disabled={inputsDisabled}
+                            disabled={inputIsDisabled}
                             value={inputFormState.email}
                             onChange={(e) => dispatchInputFormState({ 
                                     type: 'CHANGE_EMAIL_VALUE', 
@@ -177,7 +185,7 @@ const Signup = props => {
                         <span>*Password:</span>
                         <input 
                             type='password'
-                            disabled={inputsDisabled}
+                            disabled={inputIsDisabled}
                             value={inputFormState.passwordOne}
                             onChange={(e) => dispatchInputFormState({ 
                                 type: 'CHANGE_PASSWORD_ONE_VALUE', 
@@ -190,7 +198,7 @@ const Signup = props => {
                         <span>*Confirm Password:</span>
                         <input 
                             type='password'
-                            disabled={inputsDisabled}
+                            disabled={inputIsDisabled}
                             value={inputFormState.passwordTwo}
                             onChange={(e) => dispatchInputFormState({ 
                                 type: 'CHANGE_PASSWORD_TWO_VALUE', 
@@ -199,13 +207,13 @@ const Signup = props => {
                         />
                     </label>
                     
-                    {!signupState.signupIsPending ? <button>Create Account!</button> : <button disabled>Creating Account...</button>}
+                    {!signupState.isPending ? <button>Create Account!</button> : <button disabled>Creating Account...</button>}
                 </form>
 
-                {signupState.signupError ? ( <p>{signupState.signupError}</p> ) : (<div></div>)}
+                {signupState.error ? ( <p>{signupState.error}</p> ) : (<div></div>)}
                 {signupButtonClicked && inputErrorMessage && ( <p>{inputErrorMessage}</p> )}
 
-                {signupState.signupSuccess && <button onClick={() => setModalState(<Login />)}>Go to Login</button>}
+                {signupState.success && <button onClick={() => setModalState(<Login />)}>Go to Login</button>}
 
             </ModalCard>
         </>

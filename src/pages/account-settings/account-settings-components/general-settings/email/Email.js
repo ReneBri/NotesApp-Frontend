@@ -11,7 +11,6 @@ import { ModalContext } from '../../../../../context/modalContext';
 // hooks
 import { useContext, useReducer } from 'react';
 import { useValidateUserInput } from '../../../../../hooks/useValidateUserInput';
-import { useReauthenticateUser } from '../../../../../hooks/useReauthenticateUser';
 
 // components
 import ReauthenticateUser from '../../../../../components/modals/reauthenticate-user/ReauthenticateUser';
@@ -19,18 +18,19 @@ import ReauthenticateUser from '../../../../../components/modals/reauthenticate-
 
 const Email = ({ infoToChange, setInfoToChange, email }) => {
 
-    // use AuthContext
+    // Use AuthContext
     const { dispatchAuthState } = useContext(AuthContext);
 
+    // To set the modal state
     const { setModalState } = useContext(ModalContext)
 
-    // This validates the newly chosen display name
+    // Validate the newly chosen display name
     const { validateEmail, userInputErrorMessage } = useValidateUserInput();
 
     // Reducer for the user input
-    const reduceCurrentEmail = (state, action) => {
+    const reduceEnteredEmail = (state, action) => {
         switch(action.type){
-            case 'UPDATE_CURRENT_EMAIL':
+            case 'UPDATE_ENTERED_EMAIL':
                 return { value: action.payload, isValid: validateEmail(action.payload) };
             default:
                 return { ...state };
@@ -38,15 +38,17 @@ const Email = ({ infoToChange, setInfoToChange, email }) => {
     }
 
     // State for the display name shown on the page which is linked to the input field
-    const [currentEmailState, dispatchCurrentEmail] = useReducer(reduceCurrentEmail, { 
+    const [enteredEmailState, dispatchEnteredEmail] = useReducer(reduceEnteredEmail, { 
         value: email, 
         isValid: true
     });
 
+    ///////////////////////////////////////////////////////////////////////////////////
+    // PERHAPS TURN ALL OF THIS INTO A HOOK?
     // Update the displayName property in the Firebase system
     const updateFirebaseEmail = async () => {
         try{
-            await firebaseAuth.currentUser.updateEmail(currentEmailState.value);
+            await firebaseAuth.currentUser.updateEmail(enteredEmailState.value);
         }
         catch(err){
             console.log(err.message);
@@ -77,26 +79,30 @@ const Email = ({ infoToChange, setInfoToChange, email }) => {
     }
 
     const handleUpdateEmail = async () => {
-        if(currentEmailState.isValid){
             await updateFirebaseEmail();
             await unverifyEmail();
             resendEmailVerification();
             setInfoToChange(null);
             dispatchAuthState({ 
             type: 'UPDATE_EMAIL', 
-            payload: currentEmailState.value
+            payload: enteredEmailState.value
             });
-        }
+        
     }
+
+    ///////////////////////////////////////////////////////////////////////////////////
+
 
     // Triggered when clicking the save button
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setModalState(<ReauthenticateUser 
-            message1={`Are you sure you want to change your email to ${currentEmailState.value}?`} 
-            message2={`Enter your password to continue.`} 
-            onSuccessfulCompletion={handleUpdateEmail} 
-        />);
+        if(enteredEmailState.isValid){
+            setModalState(<ReauthenticateUser 
+                message1={`Are you sure you want to change your email to ${enteredEmailState.value}?`} 
+                message2={`Enter your password to continue.`} 
+                onSuccessfulCompletion={handleUpdateEmail} 
+            />);
+        }
     }
 
 
@@ -118,9 +124,9 @@ const Email = ({ infoToChange, setInfoToChange, email }) => {
                     <input 
                         id='email'
                         type='email'
-                        value={currentEmailState.value}
-                        onChange={(e) => dispatchCurrentEmail({ 
-                        type: 'UPDATE_CURRENT_EMAIL', 
+                        value={enteredEmailState.value}
+                        onChange={(e) => dispatchEnteredEmail({ 
+                        type: 'UPDATE_ENTERED_EMAIL', 
                         payload: e.target.value 
                         })} 
                         autoFocus
@@ -129,8 +135,8 @@ const Email = ({ infoToChange, setInfoToChange, email }) => {
                     <button onClick={handleSubmit}>Save</button>
                     <button onClick={(e) => {
                         e.preventDefault();
-                        dispatchCurrentEmail({ 
-                        type: 'UPDATE_CURRENT_EMAIL', 
+                        dispatchEnteredEmail({ 
+                        type: 'UPDATE_ENTERED_EMAIL', 
                         payload: email 
                         });
                         setInfoToChange(null)}

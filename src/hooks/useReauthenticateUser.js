@@ -50,18 +50,16 @@ export const useReauthenticateUser = () => {
         dispatchReauth({ type: 'ATTEMPT_REAUTH' });
 
         try {
-            // Signin user to Firebase
+            // Send reauthentication token from Firebase
             await firebaseAuth.currentUser.reauthenticateWithCredential(credential);
 
             // Re-update state and authContext only if still mounted
             if (!isCancelled) {
-                // dispatchAuthState({ type: 'REAUTH', payload: userCredentials.user });
                 dispatchReauth({ type: 'REAUTH_COMPLETE' });
             }
         }
         catch (err) {
             // Re-update state and authContext only if still mounted
-            console.log(err.message);
             if (!isCancelled){
                 dispatchReauth({ type: 'REAUTH_ERROR', payload: err.message });
             }

@@ -13,18 +13,19 @@ import { useReducer, useContext, useState, useEffect  } from 'react';
 
 
 const initialSignupState = {
-    signupIsPending: null,
-    signupError: null
+    isPending: null,
+    error: null,
+    success: null
 }
 
 const reduceSignupState = (state, action) => {
     switch (action.type) {
         case 'ATTEMPT_SIGNUP':
-            return { signupIsPending: true, signupError: null, signupSuccess: null };
+            return { isPending: true, error: null, success: null };
         case 'SIGNUP_COMPLETE':
-            return { signupIsPending: true, signupError: 'We have sent you an email. Please go to it to verify your email address.', signupSuccess: true };
+            return { isPending: true, error: 'We have sent you an email. Please go to it to verify your email address.', success: true };
         case 'SIGNUP_ERROR':
-            return { signupIsPending: false, signupError: action.payload, signupSuccess: false };
+            return { isPending: false, error: action.payload, success: false };
         default: 
             return state;
     }
@@ -57,12 +58,6 @@ export const useSignupWithEmailAndPassword = () => {
             });
             // Send email verification where user MUST confirm their email address
             await firebaseAuth.currentUser.sendEmailVerification();
-            
-            // Create user object with relevant data which we can use to update our personal user documents
-            // const userObject = {
-            //     firstName,
-            //     uid: userCredential.user.uid
-            // }
 
             // Re-update state and authContext only if still mounted
             if(!isCancelled){

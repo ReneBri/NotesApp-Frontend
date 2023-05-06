@@ -12,7 +12,6 @@ import { useContext } from "react";
 
 // components
 import Login from "../login/Login";
-import Signup from "../sign-up/Signup";
 import ModalBackground from "../../UI/modal-background/ModalBackground";
 import ModalCard from "../../UI/modal-card/ModalCard";
 
@@ -28,6 +27,7 @@ const UnverifiedEmail = props => {
         setModalState(<Login />);
     }
 
+    // UNSURE IF THIS IF STATEMENT IS NECCESSARY |||||||| CHECK IN FUTURE
     if(user){
         return (
             <>

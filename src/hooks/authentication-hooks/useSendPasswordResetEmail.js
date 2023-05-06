@@ -37,13 +37,13 @@ export const useSendPasswordResetEmail = () => {
     // Saftey measure for unmounting. setIsCancelled is used in the useEffect clean-up function below
     const [isCancelled, setIsCancelled] = useState(false);
 
-    // Main exported function we use for login
+    // Main exported function we use for password reset
     const sendPasswordResetEmail = async (email) => {
         
         dispatchPasswordResetEmail({ type: 'ATTEMPT_PASSWORD_RESET_EMAIL' });
 
         try {
-            // Signin user to Firebase
+            // Send password reset email from Firebase
             await firebaseAuth.sendPasswordResetEmail(email);
 
             // Re-update state and authContext only if still mounted
@@ -53,7 +53,6 @@ export const useSendPasswordResetEmail = () => {
         }
         catch (err) {
             // Re-update state and authContext only if still mounted
-            console.log(err.message);
             if (!isCancelled){
                 dispatchPasswordResetEmail({ type: 'PASSWORD_RESET_EMAIL_ERROR', payload: err.message });
             }
