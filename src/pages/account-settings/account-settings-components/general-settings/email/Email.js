@@ -100,7 +100,9 @@ const Email = ({ infoToChange, setInfoToChange, email }) => {
             setModalState(<ReauthenticateUser 
                 message1={`Are you sure you want to change your email to ${enteredEmailState.value}?`} 
                 message2={`Enter your password to continue.`} 
+                buttonText="Let's go!"
                 onSuccessfulCompletion={handleUpdateEmail} 
+                successModalMessage='Please check your inbox for a new verification email.'
             />);
         }
     }

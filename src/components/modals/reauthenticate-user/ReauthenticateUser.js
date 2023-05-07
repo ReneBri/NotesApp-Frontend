@@ -10,6 +10,7 @@ import { useReauthenticateUser } from '../../../hooks/useReauthenticateUser';
 // components
 import ModalBackground from '../../UI/modal-background/ModalBackground';
 import ModalCard from '../../UI/modal-card/ModalCard';
+import MessageModal from '../message-modal/MessageModal';
 
 
 const initialInputFormState = {
@@ -70,9 +71,9 @@ const ReauthenticateUser = props => {
     // Set this is a useEffect because when loggin in when unverified the login modal would not close
     useEffect(() => {
         if(reauthState.reauthSuccess){
-            setModalState(null);
+            setModalState(<MessageModal message={props.successModalMessage} />);
         }
-    }, [reauthState.reauthSuccess, setModalState])
+    }, [props.successModalMessage, reauthState.reauthSuccess, setModalState])
 
     return (
         <>
@@ -80,7 +81,7 @@ const ReauthenticateUser = props => {
             <ModalCard>
 
                 <h3>{props.message1}</h3>
-                <h3>{props.message2}</h3>
+                <h4>{props.message2}</h4>
                 <form onSubmit={handleSubmit}>
 
                     <label>
@@ -96,7 +97,7 @@ const ReauthenticateUser = props => {
                         />
                     </label>
                     
-                    {!reauthState.reauthIsPending ? <button>Let's Go!</button> : <button disabled>Pending...</button>}
+                    {!reauthState.reauthIsPending ? <button>{props.buttonText}</button> : <button disabled>Pending...</button>}
                 </form>
 
                 {reauthState.reauthError ? ( <p>{reauthState.reauthError}</p> ) : (<div></div>)}

@@ -20,7 +20,6 @@ const initialEmailInputState = {
 
 const ForgottenPassword = () => {
 
-
     const { validateEmail, userInputErrorMessage } = useValidateUserInput();
 
     const { sendPasswordResetEmail, passwordResetEmailState } = useSendPasswordResetEmail();
@@ -29,7 +28,7 @@ const ForgottenPassword = () => {
     const emailInputReducer = (state, action) => {
         switch (action.type) {
             case 'CHANGE_EMAIL_VALUE':
-                    return { ...state, value: action.payload, isValid: validateEmail(action.payload) };
+                return { ...state, value: action.payload, isValid: validateEmail(action.payload) };
             case 'CHECK_EMAIL_IS_VALID':
                 return { ...state, isValid: validateEmail(state.password) };
             default: return { ...state };

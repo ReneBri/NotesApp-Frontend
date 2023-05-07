@@ -14,6 +14,7 @@ import { useState, useContext } from 'react';
 import AccountSettingsSidebar from './account-settings-components/sidebar/AccountSettingsSidebar';
 import GeneralSettings from './account-settings-components/general-settings/GeneralSettings';
 import ChangePassword from './account-settings-components/change-password/ChangePassword';
+import DeleteAccount from './account-settings-components/delete-account/DeleteAccount';
 
 
 const AccountSettings = props => {
@@ -36,6 +37,10 @@ const AccountSettings = props => {
 
             {informationSelection === 'change-password' && (
                 <ChangePassword />
+            )}
+
+            {informationSelection === 'delete-account' && (
+                <DeleteAccount />
             )}
 
         </div>

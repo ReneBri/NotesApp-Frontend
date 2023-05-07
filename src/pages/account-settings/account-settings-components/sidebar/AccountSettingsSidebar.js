@@ -13,6 +13,7 @@ const AccountSettingsSidebar = ({ setInformationSelection }) => {
                 </li>
                 <li><p onClick={() => setInformationSelection('general-settings')}>General Settings</p></li>
                 <li><p onClick={() => setInformationSelection('change-password')}>Change Password</p></li>
+                <li><p onClick={() => setInformationSelection('delete-account')}>Delete Account</p></li>
             </ul>
             
         </div>
