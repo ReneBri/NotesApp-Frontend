@@ -10,10 +10,10 @@ import { ModalContext } from '../../../../../context/modalContext';
 
 // hooks
 import { useContext, useReducer } from 'react';
-import { useValidateUserInput } from '../../../../../hooks/useValidateUserInput';
+import { useValidateUserInput } from '../../../../../hooks/authentication-hooks/useValidateUserInput';
 
 // components
-import ReauthenticateUser from '../../../../../components/modals/reauthenticate-user/ReauthenticateUser';
+import ReauthenticateUser from '../../../../../components/modals/authentication-modals/reauthenticate-user/ReauthenticateUser';
 
 
 const Email = ({ infoToChange, setInfoToChange, email }) => {

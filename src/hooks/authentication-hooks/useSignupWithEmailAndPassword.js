@@ -1,10 +1,10 @@
 // styles
 
 // config
-import firebaseAuth from '../config/firebaseConfig';
+import firebaseAuth from '../../config/firebaseConfig';
 
 // context
-import { AuthContext } from '../context/authContext';
+import { AuthContext } from '../../context/authContext';
 
 // hooks
 import { useReducer, useContext, useState, useEffect  } from 'react';

@@ -1,15 +1,15 @@
 // context
-import { ModalContext } from '../../../context/modalContext';
+import { ModalContext } from '../../../../context/modalContext';
 
 // hooks
 import { useState, useReducer, useEffect, useContext } from 'react';
-import { useLogout } from '../../../hooks/useLogout';
-import { useValidateUserInput } from '../../../hooks/useValidateUserInput';
-import { useSendPasswordResetEmail } from '../../../hooks/authentication-hooks/useSendPasswordResetEmail';
+import { useLogout } from '../../../../hooks/authentication-hooks/useLogout';
+import { useValidateUserInput } from '../../../../hooks/authentication-hooks/useValidateUserInput';
+import { useSendPasswordResetEmail } from '../../../../hooks/authentication-hooks/useSendPasswordResetEmail';
 
 // components
-import ModalBackground from '../../UI/modal-background/ModalBackground';
-import ModalCard from '../../UI/modal-card/ModalCard';
+import ModalBackground from '../../modal-background/ModalBackground';
+import ModalCard from '../../modal-card/ModalCard';
 import MessageModal from '../message-modal/MessageModal';
 
 

@@ -18,8 +18,9 @@ import { useContext } from 'react';
 import Home from './pages/home/Home';
 import Dashboard from './pages/dashboard/Dashboard';
 import AccountSettings from './pages/account-settings/AccountSettings';
-import UnverifiedEmail from './components/modals/unverified-email/UnverifiedEmail';
+import UnverifiedEmail from './components/modals/authentication-modals/unverified-email/UnverifiedEmail';
 import Navbar from './components/UI/navbar/Navbar';
+import PreLoader from './components/UI/pre-loader/PreLoader';
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
 
       {!modalState && user.user !== null && !user.user.emailVerified && ReactDOM.createPortal(<UnverifiedEmail />, document.getElementById('modal-root'))}
 
+      {!user.authIsReady && <PreLoader />}
       {user.authIsReady && (
         <BrowserRouter>
         <Navbar />

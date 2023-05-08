@@ -11,7 +11,7 @@ import { useContext } from 'react';
 import { useDeleteUser } from '../../../../hooks/authentication-hooks/useDeleteUser';
 
 // components
-import ReauthenticateUser from '../../../../components/modals/reauthenticate-user/ReauthenticateUser';
+import ReauthenticateUser from '../../../../components/modals/authentication-modals/reauthenticate-user/ReauthenticateUser';
 
 const DeleteAccount = () => {
 

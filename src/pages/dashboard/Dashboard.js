@@ -7,7 +7,7 @@ import { AuthContext } from '../../context/authContext';
 
 // hooks
 import { useContext } from 'react';
-import { useLogout } from '../../hooks/useLogout';
+import { useLogout } from '../../hooks/authentication-hooks/useLogout';
 
 // components
 

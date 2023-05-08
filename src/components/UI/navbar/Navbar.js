@@ -8,12 +8,12 @@ import { ModalContext } from "../../../context/modalContext";
 import { AuthContext } from '../../../context/authContext';
 
 // hooks
-import { useLogout } from '../../../hooks/useLogout';
+import { useLogout } from '../../../hooks/authentication-hooks/useLogout';
 import { useContext } from 'react';
 
 // components
-import Login from "../../modals/login/Login";
-import Signup from "../../modals/sign-up/Signup";
+import Login from "../../modals/authentication-modals/login/Login";
+import Signup from "../../modals/authentication-modals/sign-up/Signup";
 
 // other
 import { Link } from "react-router-dom";

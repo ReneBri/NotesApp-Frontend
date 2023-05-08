@@ -1,22 +1,23 @@
 // styles
 
 // context
-import { ModalContext } from '../../../context/modalContext';
+import { ModalContext } from '../../../../context/modalContext';
 
 // hooks
 import { useEffect, useReducer, useState, useContext } from 'react';
-import { useSignupWithEmailAndPassword } from '../../../hooks/useSignupWithEmailAndPassword';
-import { useLogout } from '../../../hooks/useLogout';
+import { useSignupWithEmailAndPassword } from '../../../../hooks/authentication-hooks/useSignupWithEmailAndPassword';
+import { useLogout } from '../../../../hooks/authentication-hooks/useLogout';
+import { useValidateUserInput } from '../../../../hooks/authentication-hooks/useValidateUserInput';
 
 // components
-import ModalCard from '../../UI/modal-card/ModalCard';
-import ModalBackground from '../../UI/modal-background/ModalBackground';
+import ModalCard from '../../modal-card/ModalCard';
+import ModalBackground from '../../modal-background/ModalBackground';
 import Login from '../login/Login';
 
 
 const initialInputFormState = {
-    firstName: '',
-    firstNameIsValid: false,
+    displayName: '',
+    displayNameIsValid: false,
     email: '',
     emailIsValid: false,
     passwordOne: '',
@@ -25,59 +26,25 @@ const initialInputFormState = {
     passwordTwoIsValid: false
 }
 
-// CHANGE THESE TO A HOOK TO IMPORT
-const handleValidateFirstName = (firstName) => {
-    if (firstName.trim().match(/^[A-Za-z]+$/) && firstName.trim().length > 0){
-        return true;
-    }else{
-        return false;
-    }
-}
-
-const handleValidateEmail = (email) => {
-    if (email.trim().match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g)){
-        return true;
-    }else{
-        return false;
-    }
-}
-
-const handleValidatePasswordOne = (password) => {
-    if (password.length > 5){
-        return true;
-    }else{
-        return false;
-    }
-}
-
-const handleValidatePasswordTwo = (passwordOne, passwordTwo) => {
-    if (passwordOne.length === 0 || passwordTwo.length === 0){
-        return false;
-    }
-    if (passwordOne === passwordTwo){
-        return true;
-    }else{
-        return false;
-    }
-}
-
-
-const inputFormReducer = (state, action) => {
-
-    switch (action.type) {
-        case 'CHANGE_FIRSTNAME_VALUE':
-                return { ...state, firstName: action.payload, firstNameIsValid: handleValidateFirstName(action.payload) };
-        case 'CHANGE_EMAIL_VALUE':
-                return { ...state, email: action.payload, emailIsValid: handleValidateEmail(action.payload) };
-        case 'CHANGE_PASSWORD_ONE_VALUE':
-                return { ...state, passwordOne: action.payload, passwordOneIsValid: handleValidatePasswordOne(action.payload) };
-        case 'CHANGE_PASSWORD_TWO_VALUE':
-                return { ...state, passwordTwo: action.payload, passwordTwoIsValid: handleValidatePasswordTwo(state.passwordOne, action.payload) };
-        default: return { ...state };
-    }
-}
 
 const Signup = props => {
+
+    // Import authentication validity checking functions from hook
+    const { validateDisplayName, validateEmail, validatePasswordForSignup, validateMatchingPasswordForSignup } = useValidateUserInput();
+
+    const inputFormReducer = (state, action) => {
+        switch (action.type) {
+            case 'CHANGE_DISPLAYNAME_VALUE':
+                    return { ...state, displayName: action.payload, displayNameIsValid: validateDisplayName(action.payload) };
+            case 'CHANGE_EMAIL_VALUE':
+                    return { ...state, email: action.payload, emailIsValid: validateEmail(action.payload) };
+            case 'CHANGE_PASSWORD_ONE_VALUE':
+                    return { ...state, passwordOne: action.payload, passwordOneIsValid: validatePasswordForSignup(action.payload) };
+            case 'CHANGE_PASSWORD_TWO_VALUE':
+                    return { ...state, passwordTwo: action.payload, passwordTwoIsValid: validateMatchingPasswordForSignup(state.passwordOne, action.payload) };
+            default: return { ...state };
+        }
+    }
 
     // State for user input
     const [inputFormState, dispatchInputFormState] = useReducer(inputFormReducer, initialInputFormState);
@@ -116,7 +83,7 @@ const Signup = props => {
     // REPLACE WITH VALIDITY CHECKING HOOK!
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const formIsValid = () => {
-            if(!inputFormState.firstNameIsValid){
+            if(!inputFormState.displayNameIsValid){
                 setInputErrorMessage('Name must only contain alphabetic characters and be between 1 & 15 letters long.');
                 return false;
             }else if(!inputFormState.emailIsValid){
@@ -156,13 +123,13 @@ const Signup = props => {
                 <form onSubmit={handleSubmit}>
                     
                     <label>
-                        <span>*First Name:</span>
+                        <span>*Display Name:</span>
                         <input 
                             type='text' 
                             disabled={inputIsDisabled}
-                            value={inputFormState.firstName}
+                            value={inputFormState.displayName}
                             onChange={(e) => dispatchInputFormState({
-                                type: 'CHANGE_FIRSTNAME_VALUE',
+                                type: 'CHANGE_DISPLAYNAME_VALUE',
                                 payload: e.target.value
                             })}
                         />

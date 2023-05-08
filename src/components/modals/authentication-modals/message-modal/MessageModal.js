@@ -3,15 +3,15 @@
 // config
 
 // context
-import { ModalContext } from "../../../context/modalContext";
+import { ModalContext } from "../../../../context/modalContext";
 
 // hooks
 import { useContext } from "react";
 
 // components
 import Login from "../login/Login";
-import ModalBackground from "../../UI/modal-background/ModalBackground";
-import ModalCard from "../../UI/modal-card/ModalCard";
+import ModalBackground from "../../modal-background/ModalBackground";
+import ModalCard from "../../modal-card/ModalCard";
 
 
 const MessageModal = props => {
