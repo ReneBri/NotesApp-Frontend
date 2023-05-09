@@ -14,17 +14,25 @@ import React, { useEffect, useReducer } from 'react';
 // Initialize the context
 export const AuthContext = React.createContext();
 
+const checkIfUserHasPassword = (user) => {
+    if(user){
+        var providers = user.providerData.map(providerDetails => providerDetails.providerId);
+        return providers.includes('password');
+    }
+    return null;
+}
+
 // Manage the AuthState
 const authStateReducer = (state, action) => {
     switch (action.type) {
         case 'AUTH_STATE_IS_READY':
-            return { user: action.payload, authIsReady: true };
+            return { user: action.payload, authIsReady: true, hasPassword: checkIfUserHasPassword(action.payload) };
         case 'SIGNUP':
-            return { ...state, user: action.payload };
+            return { ...state, user: action.payload, hasPassword: checkIfUserHasPassword(action.payload) };
         case 'LOGOUT':
-            return { ...state, user: null }
+            return { ...state, user: null, hasPassword: null }
         case 'LOGIN':
-            return { ...state, user: action.payload };
+            return { ...state, user: action.payload, hasPassword: checkIfUserHasPassword(action.payload) };
         case 'UPDATE_DISPLAY_NAME':
             return { ...state, user: { ...state.user, displayName: action.payload } };
         case 'UPDATE_EMAIL':

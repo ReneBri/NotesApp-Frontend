@@ -11,6 +11,7 @@ import { ModalContext } from '../../../../../context/modalContext';
 // hooks
 import { useContext, useReducer } from 'react';
 import { useValidateUserInput } from '../../../../../hooks/authentication-hooks/useValidateUserInput';
+import { useChangeEmail } from '../../../../../hooks/authentication-hooks/useChangeEmail';
 
 // components
 import ReauthenticateUser from '../../../../../components/modals/authentication-modals/reauthenticate-user/ReauthenticateUser';
@@ -23,6 +24,8 @@ const Email = ({ infoToChange, setInfoToChange, email }) => {
 
     // To set the modal state
     const { setModalState } = useContext(ModalContext)
+
+    const { updateFirebaseEmail, unverifyEmail, resendEmailVerification, changeEmailError } = useChangeEmail();
 
     // Validate the newly chosen display name
     const { validateEmail, userInputErrorMessage } = useValidateUserInput();
@@ -45,47 +48,44 @@ const Email = ({ infoToChange, setInfoToChange, email }) => {
 
     ///////////////////////////////////////////////////////////////////////////////////
     // PERHAPS TURN ALL OF THIS INTO A HOOK?
-    // Update the displayName property in the Firebase system
-    const updateFirebaseEmail = async () => {
-        try{
-            await firebaseAuth.currentUser.updateEmail(enteredEmailState.value);
-        }
-        catch(err){
-            console.log(err.message);
-            console.log('fail');
-        }
-    }
+    // // Update the displayName property in the Firebase system
+    // const updateFirebaseEmail = async () => {
+    //     try{
+    //         await firebaseAuth.currentUser.updateEmail(enteredEmailState.value);
+    //     }
+    //     catch(err){
+    //         console.log(err.message);
+    //     }
+    // }
 
-    const unverifyEmail = async () => {
-        try{
-            await firebaseAuth.currentUser.updateProfile({
-                emailVerified: false
-            });
-        }
-        catch(err){
-            console.log(err.message);
-            console.log('fail');
-        }
-    }
+    // const unverifyEmail = async () => {
+    //     try{
+    //         await firebaseAuth.currentUser.updateProfile({
+    //             emailVerified: false
+    //         });
+    //     }
+    //     catch(err){
+    //         console.log(err.message);
+    //     }
+    // }
 
-    const resendEmailVerification = async () => {
-        try{
-            await firebaseAuth.currentUser.sendEmailVerification();
-        }
-        catch(err){
-            console.log(err.message);
-            console.log('fail');
-        }
-    }
+    // const resendEmailVerification = async () => {
+    //     try{
+    //         await firebaseAuth.currentUser.sendEmailVerification();
+    //     }
+    //     catch(err){
+    //         console.log(err.message);
+    //     }
+    // }
 
     const handleUpdateEmail = async () => {
-            await updateFirebaseEmail();
+            await updateFirebaseEmail(enteredEmailState.value);
             await unverifyEmail();
             resendEmailVerification();
             setInfoToChange(null);
             dispatchAuthState({ 
-            type: 'UPDATE_EMAIL', 
-            payload: enteredEmailState.value
+                type: 'UPDATE_EMAIL', 
+                payload: enteredEmailState.value
             });
         
     }
@@ -96,6 +96,10 @@ const Email = ({ infoToChange, setInfoToChange, email }) => {
     // Triggered when clicking the save button
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if(enteredEmailState.value === email){
+            setInfoToChange(null);
+            return;
+        }
         if(enteredEmailState.isValid){
             setModalState(<ReauthenticateUser 
                 message1={`Are you sure you want to change your email to ${enteredEmailState.value}?`} 
@@ -148,6 +152,9 @@ const Email = ({ infoToChange, setInfoToChange, email }) => {
                 </form>
                 {userInputErrorMessage && (
                     <p>{userInputErrorMessage}</p>
+                )}
+                {changeEmailError && (
+                    <p>{changeEmailError}</p>
                 )}
                 </>
             )}

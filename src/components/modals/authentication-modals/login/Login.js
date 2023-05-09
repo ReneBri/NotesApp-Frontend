@@ -1,6 +1,9 @@
 // context
 import { ModalContext } from '../../../../context/modalContext';
 
+// config
+import firebaseAuth, { provider } from '../../../../config/firebaseConfig';
+
 // hooks
 import { useState, useReducer, useEffect, useContext } from 'react';
 import { useLoginWithEmailAndPassword } from '../../../../hooks/authentication-hooks/useLoginWithEmailAndPassword';
@@ -20,21 +23,15 @@ const initialInputFormState = {
 }
 
 const inputFormReducer = (state, action) => {
-
     switch (action.type) {
-
         case 'CHANGE_EMAIL_VALUE':
                 return { ...state, email: action.payload, emailIsValid: handleValidateEmail(action.payload) };
-
         case 'CHANGE_PASSWORD_VALUE':
                 return { ...state, password: action.payload, passwordIsValid: handleValidatePassword(action.payload) };
-
         case 'CHECK_EMAIL_IS_VALID':
             return { ...state, emailIsValid: handleValidateEmail(state.email) };
-
         case 'CHECK_PASSWORD_IS_VALID':
             return { ...state, passwordIsValid: handleValidatePassword(state.password) };
-
         default: return { ...state };
     }
 }
@@ -76,6 +73,19 @@ const Login = props => {
         if(formChecker){
             await login(inputFormState.email, inputFormState.password);
         }
+    }
+
+    // I have no idea how this updates the state once it logs the user in.
+    // I have not set it to do so and there is no useEffect set.
+    const handleLoginWithGoogle = async () => {
+        try{
+            await firebaseAuth.signInWithPopup(provider);
+            setModalState(null);
+        }
+        catch(err){
+            setInputErrorMessage(err.message);
+        }
+        
     }
 
     // Set this is a useEffect because when loggin in when unverified the login modal would not close
@@ -141,6 +151,15 @@ const Login = props => {
 
                 {loginState.loginError ? ( <p>{loginState.loginError}</p> ) : (<div></div>)}
                 {loginButtonClicked && inputErrorMessage && ( <p>{inputErrorMessage}</p> )}
+
+                <hr />
+
+                <div>
+
+                    <h6>OR</h6>
+
+                    <button onClick={handleLoginWithGoogle}>Continue with Google</button>
+                </div>
 
                 <button onClick={logout}>Logout</button>
 

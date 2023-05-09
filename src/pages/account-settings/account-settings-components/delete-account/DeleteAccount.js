@@ -21,9 +21,9 @@ const DeleteAccount = () => {
 
     const handleDeleteUser = () => {
         deleteUser();
-        console.log('We made it this far baby');
     }
 
+    // So here I can add a ternary pperator and render a different version of the Reauth but for google.
     const handleClick = () => {
         setModalState(<ReauthenticateUser 
             message1='Are you sure you want to delete your account?'

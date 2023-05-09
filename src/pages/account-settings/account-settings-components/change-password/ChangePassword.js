@@ -18,10 +18,16 @@ const ChangePassword = props => {
     return (
         <div className={styles['account-settings-content']}>
             <h2>Change Password</h2>
-            {passwordResetEmailState.success === null && <p>Click button to send password reset email.</p>}
-            {passwordResetEmailState.success && <p>{`Password reset email sent to ${user.user.email}`}</p>}
-            {passwordResetEmailState.success === false && <p>Password reset email failed to send.</p>}
-            {!passwordResetEmailState.isPending ? <button onClick={handleClick}>Send</button> : <button disabled>Sending</button>}
+            {user.hasPassword && (<>
+                {passwordResetEmailState.success === null && <p>Click button to send password reset email.</p>}
+                {passwordResetEmailState.success && <p>{`Password reset email sent to ${user.user.email}`}</p>}
+                {passwordResetEmailState.success === false && <p>Password reset email failed to send.</p>}
+                {!passwordResetEmailState.isPending ? <button onClick={handleClick}>Send</button> : <button disabled>Sending</button>}
+            </>)}
+
+            {!user.hasPassword && (<>
+                <p>Brudda</p>
+            </>)}
         </div>
     )
 }

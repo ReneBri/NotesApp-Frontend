@@ -56,6 +56,10 @@ const DisplayName = ({ infoToChange, setInfoToChange, displayName }) => {
   // Triggered when clicking the save button
   const handleSubmit = (e) => {
     e.preventDefault();
+    if(currentDisplayNameState.value === displayName){
+      setInfoToChange(null);
+      return;
+    }
     if(currentDisplayNameState.isValid){
       updateFirebaseDisplayName();
       setInfoToChange(null);

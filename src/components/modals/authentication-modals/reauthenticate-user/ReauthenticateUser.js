@@ -1,5 +1,6 @@
 // context
 import { ModalContext } from '../../../../context/modalContext';
+import { AuthContext } from '../../../../context/authContext';
 
 // hooks
 import { useState, useReducer, useEffect, useContext } from 'react';
@@ -26,7 +27,6 @@ const ReauthenticateUser = props => {
     const { validatePassword, userInputErrorMessage } = useValidateUserInput();
 
     const inputFormReducer = (state, action) => {
-
         switch (action.type) {
             case 'CHANGE_PASSWORD_VALUE':
                     return { ...state, password: action.payload, passwordIsValid: validatePassword(action.payload) };
@@ -46,6 +46,8 @@ const ReauthenticateUser = props => {
 
     const { setModalState } = useContext(ModalContext);
 
+    const { user } = useContext(AuthContext);
+
     const { logout } = useLogout();
 
     const handleSubmit = async (e) => {
@@ -55,34 +57,28 @@ const ReauthenticateUser = props => {
         }
         // const formChecker = formIsValid();
         if(inputFormState.passwordIsValid){
-            // Theres no catch block here because the error message is already caught in the reauthState
-            // Maybe we can just delete the catch here altogether?
-            try{
-                await reauthenticateUser(inputFormState.password);
-                props.onSuccessfulCompletion();
-            }
-            catch(err){
-                setReauthErrorMessage(err.message);
-            }
-            
+            await reauthenticateUser(inputFormState.password);
         }
     }
 
     // Set this is a useEffect because when loggin in when unverified the login modal would not close
     useEffect(() => {
         if(reauthState.reauthSuccess){
+            props.onSuccessfulCompletion();
             setModalState(<MessageModal message={props.successModalMessage} />);
         }
-    }, [props.successModalMessage, reauthState.reauthSuccess, setModalState])
+    }, [props, props.successModalMessage, reauthState.reauthSuccess, setModalState])
 
     return (
         <>
             <ModalBackground />
             <ModalCard>
 
-                <h3>{props.message1}</h3>
-                <h4>{props.message2}</h4>
-                <form onSubmit={handleSubmit}>
+                {user.hasPassword && (<>
+                    <h3>{props.message1}</h3>
+                    <h4>{props.message2}</h4>
+
+                    <form onSubmit={handleSubmit}>
 
                     <label>
                         <span>Password:</span>
@@ -96,14 +92,17 @@ const ReauthenticateUser = props => {
                             autoFocus
                         />
                     </label>
-                    
+
                     {!reauthState.reauthIsPending ? <button>{props.buttonText}</button> : <button disabled>Pending...</button>}
-                </form>
+                    </form>
 
-                {reauthState.reauthError ? ( <p>{reauthState.reauthError}</p> ) : (<div></div>)}
-                {reauthButtonClicked && userInputErrorMessage && ( <p>{userInputErrorMessage}</p> )}
+                    {reauthState.reauthError ? ( <p>{reauthState.reauthError}</p> ) : (<div></div>)}
+                    {reauthButtonClicked && userInputErrorMessage && ( <p>{userInputErrorMessage}</p> )}
+                </>)}
 
-                <button onClick={logout}>Logout</button>
+                {!user.hasPassword && (<>
+                    <h3>You seem to have signed up using Google. Please set a password in the Account Settings page in order to proceed.</h3>
+                </>)}
 
             </ModalCard>
     
