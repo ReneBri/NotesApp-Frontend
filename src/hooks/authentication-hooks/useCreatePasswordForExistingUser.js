@@ -11,17 +11,17 @@ import { useEffect, useState, useReducer, useContext} from 'react'
 
 // components
 
-const initialDeleteUserState = {
+const initialCreatePasswordState = {
     isPending: false,
     error: null,
     success: null
 }
 
-const reduceDeleteUserState = (state, action) => {
+const reduceCreatePasswordState = (state, action) => {
     switch(action.type){
         case 'ATTEMPT_DELETE_USER':
             return {isPending: true, error: false, success: null};
-        case 'DELETE_USER_COMPLETE':
+        case 'ATTEMPT_DELETE_COMPLETE':
             return {isPending: false, error: false, success: true};
         case 'DELETE_USER_ERROR':
             return {isPending: false, error: action.payload, success: false};
@@ -30,41 +30,39 @@ const reduceDeleteUserState = (state, action) => {
     }
 }
 
-export const useDeleteUser = () => {
+export const useCreatePasswordForExistingUser = () => {
 
-    const [deleteUserState, dispatchDeleteUserState] = useReducer(reduceDeleteUserState, initialDeleteUserState);
+    const [createPasswordForExistingUserState, dispatchCreatePasswordState] = useReducer(reduceCreatePasswordState, initialCreatePasswordState);
 
     const [isCancelled, setIsCancelled] = useState(false);
 
     const { dispatchAuthState } = useContext(AuthContext);
 
 
-    const deleteUser = async () => {
+    const createPasswordForExistingUser = async (newPassword) => {
 
-        dispatchDeleteUserState({ type: 'ATTEMPT_DELETE_USER' });
+        dispatchCreatePasswordState({ type: 'ATTEMPT_CREATE_PASSWORD' });
 
         try {
-            await firebaseAuth.currentUser.delete();
+            await firebaseAuth.currentUser.updatePassword(newPassword);
             if(!isCancelled){
-                dispatchDeleteUserState({ type: 'DELETE_USER_COMPLETE' });
-                dispatchAuthState({ type: 'DELETE_USER' });
+                dispatchCreatePasswordState({ type: 'CREATE_PASSWORD_COMPLETE' });
+                dispatchAuthState({ type: 'CREATE_PASSWORD_FOR_EXISTING_USER' });
             }
         }
         catch(err){
             if(!isCancelled){
-                dispatchDeleteUserState({type: 'DELETE_USER_ERROR', payload: err.message });
+                dispatchCreatePasswordState({type: 'CREATE_PASSWORD_ERROR', payload: err.message });
             }
         }
         
     }
 
     useEffect(() => {
-        return () => {
-            setIsCancelled(true);
-        }
+        return () => setIsCancelled(true);
     });
 
-    return { deleteUser, deleteUserState };
+    return { createPasswordForExistingUser, createPasswordForExistingUserState };
 }
 
 

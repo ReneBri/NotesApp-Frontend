@@ -2,7 +2,6 @@
 import { ModalContext } from '../../../../context/modalContext';
 
 // config
-import firebaseAuth, { provider } from '../../../../config/firebaseConfig';
 
 // hooks
 import { useState, useReducer, useEffect, useContext } from 'react';
@@ -13,6 +12,8 @@ import { useLogout } from '../../../../hooks/authentication-hooks/useLogout';
 import ModalBackground from '../../../modals/modal-background/ModalBackground';
 import ModalCard from '../../../modals/modal-card/ModalCard';
 import ForgottenPassword from '../forgotten-password/ForgottenPassword';
+import GoogleAuthenticationButton from '../google-authentication-button/GoogleAuthenticationButton';
+import ModalCardDivider from '../../modal-card/ModalCardDivider';
 
 
 const initialInputFormState = {
@@ -73,19 +74,6 @@ const Login = props => {
         if(formChecker){
             await login(inputFormState.email, inputFormState.password);
         }
-    }
-
-    // I have no idea how this updates the state once it logs the user in.
-    // I have not set it to do so and there is no useEffect set.
-    const handleLoginWithGoogle = async () => {
-        try{
-            await firebaseAuth.signInWithPopup(provider);
-            setModalState(null);
-        }
-        catch(err){
-            setInputErrorMessage(err.message);
-        }
-        
     }
 
     // Set this is a useEffect because when loggin in when unverified the login modal would not close
@@ -152,14 +140,9 @@ const Login = props => {
                 {loginState.loginError ? ( <p>{loginState.loginError}</p> ) : (<div></div>)}
                 {loginButtonClicked && inputErrorMessage && ( <p>{inputErrorMessage}</p> )}
 
-                <hr />
+                <ModalCardDivider />
 
-                <div>
-
-                    <h6>OR</h6>
-
-                    <button onClick={handleLoginWithGoogle}>Continue with Google</button>
-                </div>
+                <GoogleAuthenticationButton />
 
                 <button onClick={logout}>Logout</button>
 

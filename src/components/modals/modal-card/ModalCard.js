@@ -20,6 +20,7 @@ const ModalCard = props => {
     return (
         <div className={styles.modalCard}>
             <img 
+                className={styles.close}
                 src={exitIcon}
                 onClick={() => {setModalState(null)}} 
                 alt='Exit the modal here'

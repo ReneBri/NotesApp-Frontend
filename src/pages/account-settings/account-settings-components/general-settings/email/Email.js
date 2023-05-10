@@ -20,7 +20,7 @@ import ReauthenticateUser from '../../../../../components/modals/authentication-
 const Email = ({ infoToChange, setInfoToChange, email }) => {
 
     // Use AuthContext
-    const { dispatchAuthState } = useContext(AuthContext);
+    const { user, dispatchAuthState } = useContext(AuthContext);
 
     // To set the modal state
     const { setModalState } = useContext(ModalContext)
@@ -46,51 +46,17 @@ const Email = ({ infoToChange, setInfoToChange, email }) => {
         isValid: true
     });
 
-    ///////////////////////////////////////////////////////////////////////////////////
-    // PERHAPS TURN ALL OF THIS INTO A HOOK?
-    // // Update the displayName property in the Firebase system
-    // const updateFirebaseEmail = async () => {
-    //     try{
-    //         await firebaseAuth.currentUser.updateEmail(enteredEmailState.value);
-    //     }
-    //     catch(err){
-    //         console.log(err.message);
-    //     }
-    // }
-
-    // const unverifyEmail = async () => {
-    //     try{
-    //         await firebaseAuth.currentUser.updateProfile({
-    //             emailVerified: false
-    //         });
-    //     }
-    //     catch(err){
-    //         console.log(err.message);
-    //     }
-    // }
-
-    // const resendEmailVerification = async () => {
-    //     try{
-    //         await firebaseAuth.currentUser.sendEmailVerification();
-    //     }
-    //     catch(err){
-    //         console.log(err.message);
-    //     }
-    // }
-
     const handleUpdateEmail = async () => {
-            await updateFirebaseEmail(enteredEmailState.value);
-            await unverifyEmail();
-            resendEmailVerification();
-            setInfoToChange(null);
-            dispatchAuthState({ 
-                type: 'UPDATE_EMAIL', 
-                payload: enteredEmailState.value
-            });
-        
+        await updateFirebaseEmail(enteredEmailState.value);
+        await unverifyEmail();
+        resendEmailVerification();
+        setInfoToChange(null);
+        dispatchAuthState({ 
+            type: 'UPDATE_EMAIL', 
+            payload: enteredEmailState.value
+        });   
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////
 
 
     // Triggered when clicking the save button
@@ -107,6 +73,7 @@ const Email = ({ infoToChange, setInfoToChange, email }) => {
                 buttonText="Let's go!"
                 onSuccessfulCompletion={handleUpdateEmail} 
                 successModalMessage='Please check your inbox for a new verification email.'
+                email={user.user.email}
             />);
         }
     }
@@ -120,42 +87,50 @@ const Email = ({ infoToChange, setInfoToChange, email }) => {
                     <label htmlFor='user-email'>Email:</label>
                     <p id='user-email'>{email}</p>
                 </div>
-                <button onClick={() => setInfoToChange('email')}>Edit</button>
+                {user.hasPassword ? (
+                    <button 
+                        onClick={() => setInfoToChange('email')}
+                        >Edit
+                    </button>
+                ) : (
+                    <></>
+                )}
                 </div>
             ) : ( 
                 <>
-                <form className={styles['info-wrapper']}>
-                    <div className={styles['info-label-wrapper']}>
-                    <label htmlFor='email'>Email:</label>
-                    <input 
-                        id='email'
-                        type='email'
-                        value={enteredEmailState.value}
-                        onChange={(e) => dispatchEnteredEmail({ 
-                        type: 'UPDATE_ENTERED_EMAIL', 
-                        payload: e.target.value 
-                        })} 
-                        autoFocus
-                    />
-                    </div>
-                    <button onClick={handleSubmit}>Save</button>
-                    <button onClick={(e) => {
-                        e.preventDefault();
-                        dispatchEnteredEmail({ 
-                        type: 'UPDATE_ENTERED_EMAIL', 
-                        payload: email 
-                        });
-                        setInfoToChange(null)}
-                        }
-                        >Cancel
-                    </button>
-                </form>
-                {userInputErrorMessage && (
-                    <p>{userInputErrorMessage}</p>
-                )}
-                {changeEmailError && (
-                    <p>{changeEmailError}</p>
-                )}
+                    <form className={styles['info-wrapper']}>
+                        <div className={styles['info-label-wrapper']}>
+                        <label htmlFor='email'>Email:</label>
+                        <input 
+                            id='email'
+                            type='email'
+                            value={enteredEmailState.value}
+                            onChange={(e) => dispatchEnteredEmail({ 
+                            type: 'UPDATE_ENTERED_EMAIL', 
+                            payload: e.target.value 
+                            })} 
+                            autoFocus
+                        />
+                        </div>
+                        <button onClick={handleSubmit}>Save</button>
+                        <button onClick={(e) => {
+                            e.preventDefault();
+                            dispatchEnteredEmail({ 
+                            type: 'UPDATE_ENTERED_EMAIL', 
+                            payload: email 
+                            });
+                            setInfoToChange(null)}
+                            }
+                            >Cancel
+                        </button>
+                    </form>
+
+                    {userInputErrorMessage && (
+                        <p>{userInputErrorMessage}</p>
+                    )}
+                    {changeEmailError && (
+                        <p>{changeEmailError}</p>
+                    )}
                 </>
             )}
         </>

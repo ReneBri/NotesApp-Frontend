@@ -5,6 +5,7 @@ import styles from '../../AccountSettings.module.css';
 
 // context
 import { ModalContext } from '../../../../context/modalContext';
+import { AuthContext } from '../../../../context/authContext';
 
 // hooks
 import { useContext } from 'react';
@@ -16,6 +17,8 @@ import ReauthenticateUser from '../../../../components/modals/authentication-mod
 const DeleteAccount = () => {
 
     const { setModalState } = useContext(ModalContext);
+
+    const { user } = useContext(AuthContext);
 
     const { deleteUser, deleteUserState } = useDeleteUser();
 
@@ -31,6 +34,7 @@ const DeleteAccount = () => {
             buttonText='Delete'
             onSuccessfulCompletion={handleDeleteUser}
             successModalMessage='Account successfully deleted.'
+            email={user.user.email}
         />);
     }
 

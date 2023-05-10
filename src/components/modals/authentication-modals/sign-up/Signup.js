@@ -13,6 +13,8 @@ import { useValidateUserInput } from '../../../../hooks/authentication-hooks/use
 import ModalCard from '../../modal-card/ModalCard';
 import ModalBackground from '../../modal-background/ModalBackground';
 import Login from '../login/Login';
+import ModalCardDivider from '../../modal-card/ModalCardDivider';
+import GoogleAuthenticationButton from '../google-authentication-button/GoogleAuthenticationButton';
 
 
 const initialInputFormState = {
@@ -181,6 +183,12 @@ const Signup = props => {
                 {signupButtonClicked && inputErrorMessage && ( <p>{inputErrorMessage}</p> )}
 
                 {signupState.success && <button onClick={() => setModalState(<Login />)}>Go to Login</button>}
+
+                <ModalCardDivider />
+
+                <div>
+                    <GoogleAuthenticationButton />
+                </div>
 
             </ModalCard>
         </>

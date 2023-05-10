@@ -3,10 +3,10 @@
     background-color: white;
     border-radius: 16px;
     box-shadow: 1px 1px 10px black;
-    padding: 24px;
+    padding: 48px;
     padding-bottom: 48px;
-    max-width: 480px;
-    min-width: 480px;
+    max-width: 400px;
+    min-width: 360px;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -24,9 +24,8 @@
 .modalCard form {
     display: flex;
     flex-direction: column;
-    /* border: 1px solid black; */
-    padding-left: 24px;
-    padding-right: 24px;
+    /* padding-left: 24px;
+    padding-right: 24px; */
 }
 
 .modalCard form label {
@@ -45,7 +44,7 @@
     margin-top: 4px;
 }
 
-.modalCard img {
+.modalCard .close {
     height: 24px;
     width: 24px;
     position: absolute;

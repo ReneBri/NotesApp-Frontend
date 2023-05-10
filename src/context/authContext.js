@@ -39,6 +39,8 @@ const authStateReducer = (state, action) => {
             return { ...state, user: { ...state.user, email: action.payload, emailVerified: false } };
         case 'DELETE_USER':
             return { ...state, user: null };
+        case 'CREATE_PASSWORD_FOR_EXISTING_USER':
+            return { ...state, hasPassword: true }
         default: return { ...state };
     }
 }

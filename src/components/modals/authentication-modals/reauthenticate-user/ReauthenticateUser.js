@@ -12,6 +12,7 @@ import { useReauthenticateUser } from '../../../../hooks/authentication-hooks/us
 import ModalBackground from '../../modal-background/ModalBackground';
 import ModalCard from '../../modal-card/ModalCard';
 import MessageModal from '../message-modal/MessageModal';
+import ReauthWithoutPassword from './ReauthWithoutPassword';
 
 
 const initialInputFormState = {
@@ -22,7 +23,7 @@ const initialInputFormState = {
 }
 
 
-const ReauthenticateUser = props => {
+const ReauthenticateUser = ({ message1, message2, buttonText, onSuccessfulCompletion, successModalMessage, email }) => {
 
     const { validatePassword, userInputErrorMessage } = useValidateUserInput();
 
@@ -64,10 +65,10 @@ const ReauthenticateUser = props => {
     // Set this is a useEffect because when loggin in when unverified the login modal would not close
     useEffect(() => {
         if(reauthState.reauthSuccess){
-            props.onSuccessfulCompletion();
-            setModalState(<MessageModal message={props.successModalMessage} />);
+            onSuccessfulCompletion();
+            setModalState(<MessageModal message={successModalMessage} />);
         }
-    }, [props, props.successModalMessage, reauthState.reauthSuccess, setModalState])
+    }, [successModalMessage, reauthState.reauthSuccess, setModalState, onSuccessfulCompletion])
 
     return (
         <>
@@ -75,8 +76,8 @@ const ReauthenticateUser = props => {
             <ModalCard>
 
                 {user.hasPassword && (<>
-                    <h3>{props.message1}</h3>
-                    <h4>{props.message2}</h4>
+                    <h3>{message1}</h3>
+                    <h4>{message2}</h4>
 
                     <form onSubmit={handleSubmit}>
 
@@ -93,16 +94,14 @@ const ReauthenticateUser = props => {
                         />
                     </label>
 
-                    {!reauthState.reauthIsPending ? <button>{props.buttonText}</button> : <button disabled>Pending...</button>}
+                    {!reauthState.reauthIsPending ? <button>{buttonText}</button> : <button disabled>Pending...</button>}
                     </form>
 
                     {reauthState.reauthError ? ( <p>{reauthState.reauthError}</p> ) : (<div></div>)}
                     {reauthButtonClicked && userInputErrorMessage && ( <p>{userInputErrorMessage}</p> )}
                 </>)}
 
-                {!user.hasPassword && (<>
-                    <h3>You seem to have signed up using Google. Please set a password in the Account Settings page in order to proceed.</h3>
-                </>)}
+                {!user.hasPassword && (<ReauthWithoutPassword message1={message1} message2={message2} buttonText={buttonText} onSuccessfulCompletion={onSuccessfulCompletion} successModalMessage={successModalMessage} email={email} />)}
 
             </ModalCard>
     
