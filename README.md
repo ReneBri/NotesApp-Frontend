@@ -12,6 +12,12 @@ I have build this for multiple reasons:
 
 Please, if you come across this and have any feedback or ideas for improvement, I would be happy to hear from you.
 
+So far in this documentation I cover:
+1. Authentication Hooks
+2. Routeing
+3. Modals
+4. Auth Context API
+
 More documentation to come over the next week...
 
 ## AUTHENTICATION HOOKS
@@ -211,7 +217,7 @@ As you may have noticed - upon refresh, there is a loading screen. This serves m
 ```
 { user: null, authIsReady: false, hasPassword: null }
 ```
-As you can see the default value for user is null. This means that if there were no loading screen, all of page conditionals rendered that depend on whether a user is logged in or not, will render with the 'user' value of 'null' in mind. This can lead to a very jumpy and non-user friendly experience. So to combat this, we use the fact that authIsReady’s default value is false, then only when the user is confirmed by Firebase does it become true.
+As you can see, the default value for user is null. This means that if there were no loading screen, all of page conditionals rendered that depend on whether a user is logged in or not, will render with the 'user' value of 'null' in mind. This can lead to a very jumpy and non-user friendly experience. So to combat this, we use the fact that authIsReady’s default value is false, then only when the user is confirmed by Firebase does it become true.
 
 To take advantage of this, we use routing with this conditional set up in the App.js file:
 ```
@@ -260,7 +266,7 @@ const UpdateDisplayNameButton = ({ newDisplayName }) => {
 	)				
 }
 ```
-Above is a example of a button component, that when clicked will update our display name. As you can see, that for every Firebase action we have, we need a authContext dispatch function to mirror it. But this is just half the story, as the dispatch function is only a messanger... Over in our authContext.js we need to tell our reducer function what to do with the object received from the dispatchAuthState() function.
+Above is a example of a button component, that when clicked will update our display name. As you can see, that for every Firebase action we have, we need an authContext dispatch function to mirror it. But this is just half the story, as the dispatch function is only a messanger... Over in our authContext.js we need to tell our reducer function what to do with the object received from the dispatchAuthState() function.
 
 **AUTHSTATEREDUCER():**
 
@@ -283,10 +289,10 @@ For the sake of the example, here's what the previous state could have been and 
 // Previous state
 { authIsReady: true, hasPassword: true, user: { displayName: 'Rene', email: 'rene@rene.com', phoneNumber: '1234' } }
 
-// Dispatch Object
+// Dispatch object
 { type: ‘UPDATE_DISPLAY_NAME’, payload: newDisplayName }
 ```
-So, once the authStateReducer is called by our dispatch function, it checks for the matching 'type' property in the switch statement, in this case its ‘UPDATE_DISPLAY_NAME’. Once it finds a match, it then returns the new state, in this case an object. It does this by spreading out the values of the old state with '...state'. This gives us the old, unchanged values of authIsReady and hasPassword. Then because we specify the 'user' property it will update that property. In this case, spreading out the old values of email and phoneNumber and then changing the displayName value to that of the 'action.payload', which we specified in the dispatch function. So this then will return the following:
+So, once the authStateReducer is called by our dispatch function, it checks for the matching 'type' property in the switch statement, in this case its ‘UPDATE_DISPLAY_NAME’. Once it finds a match, it then returns the new state, in this case an object. It does this by spreading out the values of the old state with '...state'. This gives us the old, unchanged values of authIsReady and hasPassword. Then because we specify the 'user' property it will update that property. In this case, spreading out the old values of email and phoneNumber with '...state.user' and then changing the displayName value to that of the 'action.payload', which we specified in the dispatch function. So this then will return the following:
 ```
 { authIsReady: true, hasPassword: true, user: { displayName: 'New Display Name', email: 'rene@rene.com', phoneNumber: '1234' } }
 ```
