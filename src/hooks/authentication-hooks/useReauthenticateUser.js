@@ -15,18 +15,19 @@ import { useEffect, useState, useReducer, useContext } from 'react'
 
 
 const initialReauthState = {
-    reauthIsPending: null,
-    reauthError: null
+    isPending: null,
+    error: null,
+    success: null
 }
 
 const reduceReauth = (state, action) => {
     switch (action.type) {
         case 'ATTEMPT_REAUTH':
-            return { reauthIsPending: true, reauthError: null, reauthSuccess: null };
+            return { isPending: true, error: null, success: null };
         case 'REAUTH_COMPLETE':
-            return { reauthIsPending: false, reauthError: null, reauthSuccess: true };
+            return { isPending: false, error: null, success: true };
         case 'REAUTH_ERROR':
-            return { reauthIsPending: false, reauthError: action.payload, reauthSuccess: false };
+            return { isPending: false, error: action.payload, success: false };
         default: return state;
     }
 }
@@ -43,6 +44,8 @@ export const useReauthenticateUser = () => {
 
     // Main exported function we use for login
     const reauthenticateUser = async (password) => {
+
+        setIsCancelled(false);
 
         const credential = firebase.auth.EmailAuthProvider.credential(user.user.email, 
             password);

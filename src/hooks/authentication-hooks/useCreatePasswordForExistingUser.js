@@ -41,6 +41,8 @@ export const useCreatePasswordForExistingUser = () => {
 
     const createPasswordForExistingUser = async (newPassword) => {
 
+        setIsCancelled(false);
+
         dispatchCreatePasswordState({ type: 'ATTEMPT_CREATE_PASSWORD' });
 
         try {

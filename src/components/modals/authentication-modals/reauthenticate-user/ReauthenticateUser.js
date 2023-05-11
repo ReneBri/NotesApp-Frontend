@@ -64,11 +64,11 @@ const ReauthenticateUser = ({ message1, message2, buttonText, onSuccessfulComple
 
     // Set this is a useEffect because when loggin in when unverified the login modal would not close
     useEffect(() => {
-        if(reauthState.reauthSuccess){
+        if(reauthState.success){
             onSuccessfulCompletion();
             setModalState(<MessageModal message={successModalMessage} />);
         }
-    }, [successModalMessage, reauthState.reauthSuccess, setModalState, onSuccessfulCompletion])
+    }, [successModalMessage, reauthState.success, setModalState, onSuccessfulCompletion])
 
     return (
         <>
@@ -94,10 +94,10 @@ const ReauthenticateUser = ({ message1, message2, buttonText, onSuccessfulComple
                         />
                     </label>
 
-                    {!reauthState.reauthIsPending ? <button>{buttonText}</button> : <button disabled>Pending...</button>}
+                    {!reauthState.isPending ? <button>{buttonText}</button> : <button disabled>Pending...</button>}
                     </form>
 
-                    {reauthState.reauthError ? ( <p>{reauthState.reauthError}</p> ) : (<div></div>)}
+                    {reauthState.error ? ( <p>{reauthState.error}</p> ) : (<div></div>)}
                     {reauthButtonClicked && userInputErrorMessage && ( <p>{userInputErrorMessage}</p> )}
                 </>)}
 

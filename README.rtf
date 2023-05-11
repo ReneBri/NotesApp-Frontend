@@ -1,0 +1,108 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2513
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica-Bold;\f1\fswiss\fcharset0 Helvetica;\f2\fswiss\fcharset0 Helvetica-Oblique;
+}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{decimal\}.}{\leveltext\leveltemplateid1\'02\'00.;}{\levelnumbers\'01;}\fi-360\li720\lin720 }{\listname ;}\listid1}
+{\list\listtemplateid2\listhybrid{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{decimal\}.}{\leveltext\leveltemplateid101\'02\'00.;}{\levelnumbers\'01;}\fi-360\li720\lin720 }{\listname ;}\listid2}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}{\listoverride\listid2\listoverridecount0\ls2}}
+\paperw11900\paperh16840\margl1440\margr1440\vieww20720\viewh18500\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\b\fs36 \cf0 AUTHENTICATION HOOKS
+\f1\b0\fs24 \
+\
+All of the authentication hooks generally follow the same structure, with the exceptions of \'91useValidateUserInput\'92 & \'91useChangeEmail\'92, which I will give their own sections at the end.\
+\
+Each hook returns an object with two properties. The first is a function and the second is an object which provides updates about the status of that function. For example if the function request is pending, has an error or has been completed successfully. \
+\
+
+\f0\b THE FUNCTION:
+\f1\b0 \
+All of these returned authentication hook functions are asynchronous. This is because they are connecting with and updating the Firebase Authentication service, which takes time to do. These functions also update our User Context API, so that both the User Context and the Firebase Authentication service are in sync.\
+Within these functions we have some conditionals, which are dictated by the isCancelled piece of state. These are our clean-up conditionals, so that if our component dismounts the state will not be updated. It is also within these functions that if you were to update an external database, like MongoDB for example, you would add use of another hook to do so within this function.\
+\
+
+\f0\b THE OBJECT:
+\f1\b0 \
+The object returned usually consists of three key value pairs:\
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\li720\fi-720\pardirnatural\partightenfactor0
+\ls1\ilvl0\cf0 {\listtext	1.	}
+\f2\i isPending
+\f1\i0  - This tells us if the function called in the hook is still in process.\
+{\listtext	2.	}
+\f2\i error
+\f1\i0  - This will display the error message should one be returned from Firebase.\
+{\listtext	3.	}
+\f2\i success
+\f1\i0  - This tells us wether our function was successful or not. Its original default value is null.\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 Using these three pieces of state we can conditionally display different jsx elements in our components depending on their values.\
+\
+
+\f0\b THE CLEAN-UP FUNCTION:
+\f1\b0 \
+ This is not returned but is present in our hook. It is the function \'91setIsCancelled(true);\'92 which is returned inside of the empty useEffect at the end of our hook. Since a useEffect clean-up function runs on mount and every subsequent re-render, at the start of our returned function we need to reset isCancelled to false.\
+\
+
+\f0\b EXAMPLE:
+\f1\b0 \
+To give an example of how one of these hooks are used within a component I will use the \'91useLoginWithEmailAndPassword\'92 hook:\
+\
+import \{ useLoginWithEmailAndPassword \} from \'91../../hooks/authentication-hooks/useLoginWithEmailAndPassword\'92;\
+\
+const Component = () => \{\
+\
+	const \{ login, loginState \} = useLoginWithEmailAndPassword();\
+\
+	return (\
+		\{!loginState.isPending ? <button onClick=\{() => login(email, password)\}>Login<button> : <button disabled>Logging in<button>\}\
+	)\
+\
+\}	\
+\
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////\
+\
+
+\f0\b\fs36 ROUTING
+\f1\b0\fs24 \
+\
+All routing can be found within the App.js file and uses React Router v6. So far there is only 3 different pages:\
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\li720\fi-720\pardirnatural\partightenfactor0
+\ls2\ilvl0\cf0 {\listtext	1.	}
+\f2\i The Home page
+\f1\i0 , which a user can only see when logged out.\
+{\listtext	2.	}
+\f2\i The Dashboard
+\f1\i0 , which only a logged in user can see.\
+{\listtext	3.	}
+\f2\i The Account Settings page
+\f1\i0 , which only a logged user can see.\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 All other authentication services happen with the use of modals.\
+\
+
+\f0\b ROUTE GUARDING:
+\f1\b0 \
+The routing here so far is quite basic. For example the home path (\'91/\'91) will route you to a different page (either Home or Dashboard) depending on your login status. This basic route guarding also expends to the Account Settings page and should continue like this throughout the entirety app. \
+\
+
+\f0\b LOADING SCREEN:
+\f1\b0 \
+When first loading the page connecting to Firebase to check wether a user is logged in or not can take some time. So that we do not have a blank screen during this period I have added a PreLoader component, which basically tells the user that the service won\'92t be long and shows a loading SVG. This should help with visitor retention.\
+\
+
+\f0\b MODALS:
+\f1\b0 \
+Furthermore, you will see at the top of the \'91App\'92 div that there are multiple lines referring to the modalState. This is so that if the Modal Context says that a modal is to be rendered on the screen, it is here we create the portal. The portal leads to a div with the id of \'91modal-root\'92 in the index.html file.\
+\
+
+\f0\b ROUTE GUARDING USING MODALS:
+\f1\b0 \
+This line of code:\
+\
+\{!modalState && user.user !== null && !user.user.emailVerified && ReactDOM.createPortal(<UnverifiedEmail />, document.getElementById(\'91modal-root\'92))\}\
+\
+Is route guarding, so that the user cannot use the websites\'92 services unless they have verified their email. This is to help prevent spam accounts.\
+\
+}

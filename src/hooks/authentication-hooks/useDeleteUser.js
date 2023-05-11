@@ -41,11 +41,14 @@ export const useDeleteUser = () => {
 
     const deleteUser = async () => {
 
+        setIsCancelled(false);
+
         dispatchDeleteUserState({ type: 'ATTEMPT_DELETE_USER' });
 
         try {
             await firebaseAuth.currentUser.delete();
             if(!isCancelled){
+                console.log('Triggered here!');
                 dispatchDeleteUserState({ type: 'DELETE_USER_COMPLETE' });
                 dispatchAuthState({ type: 'DELETE_USER' });
             }
@@ -61,6 +64,7 @@ export const useDeleteUser = () => {
     useEffect(() => {
         return () => {
             setIsCancelled(true);
+            console.log('clean-up');
         }
     });
 

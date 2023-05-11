@@ -39,6 +39,8 @@ export const useSendPasswordResetEmail = () => {
 
     // Main exported function we use for password reset
     const sendPasswordResetEmail = async (email) => {
+
+        setIsCancelled(false);
         
         dispatchPasswordResetEmail({ type: 'ATTEMPT_PASSWORD_RESET_EMAIL' });
 

@@ -13,18 +13,19 @@ import { useEffect, useState, useReducer, useContext } from 'react'
 
 
 const initialLoginState = {
-    loginIsPending: null,
-    loginError: null
+    isPending: null,
+    error: null,
+    success: null
 }
 
 const reduceLogin = (state, action) => {
     switch (action.type) {
         case 'ATTEMPT_LOGIN':
-            return { loginIsPending: true, loginError: null, loginSuccess: null };
+            return { isPending: true, error: null, success: null };
         case 'LOGIN_COMPLETE':
-            return { loginIsPending: false, loginError: null, loginSuccess: true };
+            return { isPending: false, error: null, success: true };
         case 'LOGIN_ERROR':
-            return { loginIsPending: false, loginError: action.payload, loginSuccess: false };
+            return { isPending: false, error: action.payload, success: false };
         default: return state;
     }
 }
@@ -42,25 +43,27 @@ export const useLoginWithEmailAndPassword = () => {
     // Main exported function we use for login
     const login = async (email, password) => {
 
-            dispatchLogin({ type: 'ATTEMPT_LOGIN' });
-    
-            try {
-                // Signin user to Firebase
-                const userCredentials = await firebaseAuth.signInWithEmailAndPassword(email, password);
+        setIsCancelled(false);
 
-                // Re-update state and authContext only if still mounted
-                if (!isCancelled) {
-                    dispatchAuthState({ type: 'LOGIN', payload: userCredentials.user });
-                    dispatchLogin({ type: 'LOGIN_COMPLETE' });
-                }
+        dispatchLogin({ type: 'ATTEMPT_LOGIN' });
+
+        try {
+            // Signin user to Firebase
+            const userCredentials = await firebaseAuth.signInWithEmailAndPassword(email, password);
+
+            // Re-update state and authContext only if still mounted
+            if (!isCancelled) {
+                dispatchAuthState({ type: 'LOGIN', payload: userCredentials.user });
+                dispatchLogin({ type: 'LOGIN_COMPLETE' });
             }
-            catch (err) {
-                // Re-update state and authContext only if still mounted
-                console.log(err.message);
-                if (!isCancelled){
-                    dispatchLogin({ type: 'LOGIN_ERROR', payload: err.message });
-                }
+        }
+        catch (err) {
+            // Re-update state and authContext only if still mounted
+            console.log(err.message);
+            if (!isCancelled){
+                dispatchLogin({ type: 'LOGIN_ERROR', payload: err.message });
             }
+        }
     }
 
     // Clean-up function for unmounting

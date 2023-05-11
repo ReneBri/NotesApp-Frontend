@@ -78,10 +78,10 @@ const Login = props => {
 
     // Set this is a useEffect because when loggin in when unverified the login modal would not close
     useEffect(() => {
-        if(loginState.loginSuccess){
+        if(loginState.success){
             setModalState(null);
         }
-    }, [loginState.loginSuccess, setModalState])
+    }, [loginState.success, setModalState])
 
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -134,10 +134,10 @@ const Login = props => {
                         />
                     </label>
                     
-                    {!loginState.loginIsPending ? <button>Login!</button> : <button disabled>Logging in...</button>}
+                    {!loginState.isPending ? <button>Login!</button> : <button disabled>Logging in...</button>}
                 </form>
 
-                {loginState.loginError ? ( <p>{loginState.loginError}</p> ) : (<div></div>)}
+                {loginState.error ? ( <p>{loginState.error}</p> ) : (<div></div>)}
                 {loginButtonClicked && inputErrorMessage && ( <p>{inputErrorMessage}</p> )}
 
                 <ModalCardDivider />
