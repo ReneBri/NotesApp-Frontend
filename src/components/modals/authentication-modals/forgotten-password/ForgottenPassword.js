@@ -3,7 +3,6 @@ import { ModalContext } from '../../../../context/modalContext';
 
 // hooks
 import { useState, useReducer, useEffect, useContext } from 'react';
-import { useLogout } from '../../../../hooks/authentication-hooks/useLogout';
 import { useValidateUserInput } from '../../../../hooks/authentication-hooks/useValidateUserInput';
 import { useSendPasswordResetEmail } from '../../../../hooks/authentication-hooks/useSendPasswordResetEmail';
 
@@ -37,16 +36,11 @@ const ForgottenPassword = () => {
 
     const [emailInputState, dispatchEmailInputState] = useReducer(emailInputReducer, initialEmailInputState);
 
-    // Mostly not neccessary. Can probably delete
-    const [passwordResetErrorMessage, setPasswordResetErrorMessage] = useState(null);
-
     // This is so that the userInputErrorMessage only shows to the client after the send button is clicked
     const [sendButtonClicked, setSendButtonClicked] = useState(false)
 
     // To change the modal state
     const { setModalState } = useContext(ModalContext);
-
-    const { logout } = useLogout();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -54,25 +48,17 @@ const ForgottenPassword = () => {
             setSendButtonClicked(true);
         }
         if(emailInputState.isValid){
-            // We perhaps do not need a try catch since there is error message on the emailInputState
-            // No try/catch as error handling is done within the useSendPasswordResetEmail hook
-            try{
-                await sendPasswordResetEmail(emailInputState.value);
-                // />);
-                // props.onSuccessfulCompletion();
-            }
-            catch(err){
-                // pretty sure this throws the same error as passwordResetEmailState.error
-                setPasswordResetErrorMessage(err.message);
-            }
-            
+            await sendPasswordResetEmail(emailInputState.value);    
         }
     }
 
     // Redirect to a new modal upon successful from submission completion
     useEffect(() => {
         if(passwordResetEmailState.success){
-            setModalState(<MessageModal message='Please check your email and continue from there.' />);
+            setModalState(<MessageModal 
+                message='Email successfully sent. Please check your inbox :)' 
+                includeLoginButton={true}
+            />);
         }
     }, [passwordResetEmailState.success, setModalState])
 
@@ -102,8 +88,6 @@ const ForgottenPassword = () => {
 
                 {passwordResetEmailState.error ? ( <p>{passwordResetEmailState.error}</p> ) : (<div></div>)}
                 {sendButtonClicked && userInputErrorMessage && ( <p>{userInputErrorMessage}</p> )}
-
-                <button onClick={logout}>Logout</button>
 
             </ModalCard>
     

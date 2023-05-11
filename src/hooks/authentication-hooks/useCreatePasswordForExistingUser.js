@@ -19,11 +19,11 @@ const initialCreatePasswordState = {
 
 const reduceCreatePasswordState = (state, action) => {
     switch(action.type){
-        case 'ATTEMPT_DELETE_USER':
+        case 'ATTEMPT_CREATE_PASSWORD':
             return {isPending: true, error: false, success: null};
-        case 'ATTEMPT_DELETE_COMPLETE':
+        case 'CREATE_PASSWORD_COMPLETE':
             return {isPending: false, error: false, success: true};
-        case 'DELETE_USER_ERROR':
+        case 'CREATE_PASSWORD_ERROR':
             return {isPending: false, error: action.payload, success: false};
         default:
             return state;

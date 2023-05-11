@@ -5,12 +5,10 @@ import { useContext } from 'react';
 import ChangePasswordHasPassword from './ChangePasswordHasPassword';
 import ChangePasswordCreatePassword from './ChangePasswordCreatePassword';
 
+
 const ChangePassword = props => {
 
-
-
     const { user } = useContext(AuthContext);
-    
 
     return (
         <div className={styles['account-settings-content']}>

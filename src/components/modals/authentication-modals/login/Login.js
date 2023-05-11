@@ -6,7 +6,6 @@ import { ModalContext } from '../../../../context/modalContext';
 // hooks
 import { useState, useReducer, useEffect, useContext } from 'react';
 import { useLoginWithEmailAndPassword } from '../../../../hooks/authentication-hooks/useLoginWithEmailAndPassword';
-import { useLogout } from '../../../../hooks/authentication-hooks/useLogout';
 
 // components
 import ModalBackground from '../../../modals/modal-background/ModalBackground';
@@ -58,12 +57,12 @@ const Login = props => {
     const [inputFormState, dispatchInputFormState] = useReducer(inputFormReducer, initialInputFormState);
 
     const [inputErrorMessage, setInputErrorMessage] = useState(null);
+
     const [loginButtonClicked, setLoginButtonClicked] = useState(false)
 
     const { setModalState } = useContext(ModalContext);
 
     const { login, loginState } = useLoginWithEmailAndPassword();
-    const { logout } = useLogout();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -119,6 +118,7 @@ const Login = props => {
                                 type: 'CHANGE_EMAIL_VALUE', 
                                 payload: e.target.value 
                             })}  
+                            autoFocus
                         />
                     </label>
 
@@ -135,16 +135,16 @@ const Login = props => {
                     </label>
                     
                     {!loginState.isPending ? <button>Login!</button> : <button disabled>Logging in...</button>}
+
                 </form>
 
                 {loginState.error ? ( <p>{loginState.error}</p> ) : (<div></div>)}
+
                 {loginButtonClicked && inputErrorMessage && ( <p>{inputErrorMessage}</p> )}
 
                 <ModalCardDivider />
 
                 <GoogleAuthenticationButton />
-
-                <button onClick={logout}>Logout</button>
 
                 <button onClick={() => setModalState(<ForgottenPassword />)}>Forgotten your password?</button>
 

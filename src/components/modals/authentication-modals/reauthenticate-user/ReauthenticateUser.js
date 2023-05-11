@@ -4,7 +4,6 @@ import { AuthContext } from '../../../../context/authContext';
 
 // hooks
 import { useState, useReducer, useEffect, useContext } from 'react';
-import { useLogout } from '../../../../hooks/authentication-hooks/useLogout';
 import { useValidateUserInput } from '../../../../hooks/authentication-hooks/useValidateUserInput';
 import { useReauthenticateUser } from '../../../../hooks/authentication-hooks/useReauthenticateUser';
 
@@ -15,33 +14,29 @@ import MessageModal from '../message-modal/MessageModal';
 import ReauthWithoutPassword from './ReauthWithoutPassword';
 
 
-const initialInputFormState = {
-    email: '',
-    emailIsValid: false,
-    password: '',
-    passwordIsValid: false
+const initialPasswordState = {
+    value: '',
+    isValid: false
 }
 
 
-const ReauthenticateUser = ({ message1, message2, buttonText, onSuccessfulCompletion, successModalMessage, email }) => {
+const ReauthenticateUser = ({ message1, message2, buttonText, onSuccessfulCompletion, deleteUserState, successModalMessage, email }) => {
 
     const { validatePassword, userInputErrorMessage } = useValidateUserInput();
 
-    const inputFormReducer = (state, action) => {
+    const passwordReducer = (state, action) => {
         switch (action.type) {
             case 'CHANGE_PASSWORD_VALUE':
-                    return { ...state, password: action.payload, passwordIsValid: validatePassword(action.payload) };
+                    return { ...state, value: action.payload, isValid: validatePassword(action.payload) };
             case 'CHECK_PASSWORD_IS_VALID':
-                return { ...state, passwordIsValid: validatePassword(state.password) };
+                return { ...state, isValid: validatePassword(state.value) };
             default: return { ...state };
         }
     }
 
     const { reauthenticateUser, reauthState } = useReauthenticateUser();
 
-    const [inputFormState, dispatchInputFormState] = useReducer(inputFormReducer, initialInputFormState);
-
-    const [reauthErrorMessage, setReauthErrorMessage] = useState(null);
+    const [passwordState, dispatchPasswordState] = useReducer(passwordReducer, initialPasswordState);
 
     const [reauthButtonClicked, setReauthButtonClicked] = useState(false);
 
@@ -49,16 +44,13 @@ const ReauthenticateUser = ({ message1, message2, buttonText, onSuccessfulComple
 
     const { user } = useContext(AuthContext);
 
-    const { logout } = useLogout();
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!reauthButtonClicked){
             setReauthButtonClicked(true);
         }
-        // const formChecker = formIsValid();
-        if(inputFormState.passwordIsValid){
-            await reauthenticateUser(inputFormState.password);
+        if(passwordState.isValid){
+            await reauthenticateUser(passwordState.value);
         }
     }
 
@@ -66,7 +58,10 @@ const ReauthenticateUser = ({ message1, message2, buttonText, onSuccessfulComple
     useEffect(() => {
         if(reauthState.success){
             onSuccessfulCompletion();
-            setModalState(<MessageModal message={successModalMessage} />);
+            setModalState(<MessageModal 
+                message={successModalMessage}
+                includeLoginButton={true} 
+            />);
         }
     }, [successModalMessage, reauthState.success, setModalState, onSuccessfulCompletion])
 
@@ -75,33 +70,46 @@ const ReauthenticateUser = ({ message1, message2, buttonText, onSuccessfulComple
             <ModalBackground />
             <ModalCard>
 
-                {user.hasPassword && (<>
-                    <h3>{message1}</h3>
-                    <h4>{message2}</h4>
+                {user.hasPassword && (
+                    <>
+                        <h3>{message1}</h3>
+                        <h4>{message2}</h4>
 
-                    <form onSubmit={handleSubmit}>
+                        <form onSubmit={handleSubmit}>
 
-                    <label>
-                        <span>Password:</span>
-                        <input 
-                            type='password'
-                            value={inputFormState.password}
-                            onChange={(e) => dispatchInputFormState({ 
-                                type: 'CHANGE_PASSWORD_VALUE', 
-                                payload: e.target.value 
-                            })} 
-                            autoFocus
-                        />
-                    </label>
+                        <label>
+                            <span>Password:</span>
+                            <input 
+                                type='password'
+                                value={passwordState.value}
+                                onChange={(e) => dispatchPasswordState({ 
+                                    type: 'CHANGE_PASSWORD_VALUE', 
+                                    payload: e.target.value 
+                                })} 
+                                autoFocus
+                                disabled={reauthState.isPending}
+                            />
+                        </label>
 
-                    {!reauthState.isPending ? <button>{buttonText}</button> : <button disabled>Pending...</button>}
-                    </form>
+                        {!reauthState.isPending ? (<button>{buttonText}</button>) : (<button disabled>Pending...</button>)}
 
-                    {reauthState.error ? ( <p>{reauthState.error}</p> ) : (<div></div>)}
-                    {reauthButtonClicked && userInputErrorMessage && ( <p>{userInputErrorMessage}</p> )}
-                </>)}
+                        </form>
 
-                {!user.hasPassword && (<ReauthWithoutPassword message1={message1} message2={message2} buttonText={buttonText} onSuccessfulCompletion={onSuccessfulCompletion} successModalMessage={successModalMessage} email={email} />)}
+                        {reauthState.error ? (<p>{reauthState.error}</p>) : (<div></div>)}
+
+                        {reauthButtonClicked && userInputErrorMessage && ( <p>{userInputErrorMessage}</p> )}
+                    </>
+                )}
+
+                {!user.hasPassword && (<ReauthWithoutPassword 
+                    message1={message1} 
+                    message2={message2} 
+                    buttonText={buttonText} 
+                    onSuccessfulCompletion={onSuccessfulCompletion} 
+                    deleteUserState={deleteUserState}
+                    successModalMessage={successModalMessage} 
+                    email={email} 
+                />)}
 
             </ModalCard>
     

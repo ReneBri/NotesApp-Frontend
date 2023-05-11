@@ -53,7 +53,6 @@ const ChangePasswordCreatePassword = () => {
             setModalState(<MessageModal 
                 message='Password Successfully Created :)'
             />)
-            console.log('success');
         }  
     }
     
@@ -79,6 +78,8 @@ const ChangePasswordCreatePassword = () => {
                         id='password-one'
                         value={stateOfPasswords.passwordOne}
                         onChange={(e) => dispatchStateOfPasswords({ type: 'CHANGE_PASSWORD_ONE_VALUE', payload: e.target.value})}
+                        disabled={createPasswordForExistingUserState.isPending}
+                        autoFocus
                     />
                 </label>
 
@@ -89,13 +90,18 @@ const ChangePasswordCreatePassword = () => {
                         id='password-two'
                         value={stateOfPasswords.passwordTwo}
                         onChange={(e) => dispatchStateOfPasswords({ type: 'CHANGE_PASSWORD_TWO_VALUE', payload: e.target.value})}
+                        disabled={createPasswordForExistingUserState.isPending}
                     />
                 </label>
 
                 {createPasswordForExistingUserState.error && <p>{createPasswordForExistingUserState.error}</p>}
 
                 {createPasswordButtonIsClicked && userInputErrorMessage && (<p>{userInputErrorMessage}</p>)}
-                {createPasswordButtonIsClicked && isValid ? <button disabled>Create Password</button> : <button>Create Password</button>}
+                {createPasswordButtonIsClicked && !isValid ? (
+                    <button disabled>Create Password</button> 
+                    ) : ( 
+                    <button disabled={createPasswordForExistingUserState.isPending}>Create Password</button>
+                )}
 
             </form>
         </div>

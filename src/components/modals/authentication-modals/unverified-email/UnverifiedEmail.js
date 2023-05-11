@@ -37,6 +37,7 @@ const UnverifiedEmail = props => {
                     <h3>The email associated with this account is unverified. Please verify it to continue to our website!</h3>
     
                     <button onClick={handleSendEmailVerification}>Resend Verification Email</button>
+                    
                     <button onClick={() => setModalState(<Login />)}>Back to Login</button>
     
                 </ModalCard>

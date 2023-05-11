@@ -31,8 +31,9 @@ const DeleteAccount = () => {
         setModalState(<ReauthenticateUser 
             message1='Are you sure you want to delete your account?'
             message2='Deleting your account means all your user data will be lost! This is irreversible!'
-            buttonText='Delete'
+            buttonText='Delete Account'
             onSuccessfulCompletion={handleDeleteUser}
+            deleteUserState={deleteUserState}
             successModalMessage='Account successfully deleted.'
             email={user.user.email}
         />);

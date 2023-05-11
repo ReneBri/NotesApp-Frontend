@@ -14,7 +14,7 @@ import ModalBackground from "../../modal-background/ModalBackground";
 import ModalCard from "../../modal-card/ModalCard";
 
 
-const MessageModal = props => {
+const MessageModal = ({ message, includeLoginButton }) => {
 
     const { setModalState } = useContext(ModalContext);
 
@@ -24,12 +24,11 @@ const MessageModal = props => {
                 <ModalBackground />
                 <ModalCard>
     
-                    <h3>{props.message}</h3>
+                    <h3>{message}</h3>
     
-                    <button onClick={() => setModalState(<Login />)}>Back to Login</button>
+                    {includeLoginButton && <button onClick={() => setModalState(<Login />)}>Back to Login</button>}
     
                 </ModalCard>
-        
             </>
         )
     

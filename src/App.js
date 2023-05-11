@@ -27,10 +27,6 @@ function App() {
 
   const { user } = useContext(AuthContext);
 
-  const context = useContext(AuthContext);
-
-  console.log(context);
-
   const { modalState } = useContext(ModalContext);
 
   return (

@@ -59,7 +59,6 @@ export const useLoginWithEmailAndPassword = () => {
         }
         catch (err) {
             // Re-update state and authContext only if still mounted
-            console.log(err.message);
             if (!isCancelled){
                 dispatchLogin({ type: 'LOGIN_ERROR', payload: err.message });
             }

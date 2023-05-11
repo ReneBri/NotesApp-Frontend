@@ -184,11 +184,12 @@ const Signup = props => {
 
                 {signupState.success && <button onClick={() => setModalState(<Login />)}>Go to Login</button>}
 
-                <ModalCardDivider />
-
-                <div>
-                    <GoogleAuthenticationButton />
-                </div>
+                {!signupState.success && (
+                    <>
+                        <ModalCardDivider />
+                        <GoogleAuthenticationButton />
+                    </>
+                )}
 
             </ModalCard>
         </>

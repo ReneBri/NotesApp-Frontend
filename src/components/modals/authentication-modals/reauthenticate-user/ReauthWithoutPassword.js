@@ -14,11 +14,9 @@ const initialEmailState = {
     isValid: null
 }
 
-const ReauthWithoutPassword = ({ message1, message2, buttonText, onSuccessfulCompletion, successModalMessage, email }) => {
+const ReauthWithoutPassword = ({ message1, message2, buttonText, onSuccessfulCompletion, deleteUserState, successModalMessage, email }) => {
 
     const { validateEmail, userInputErrorMessage } = useValidateUserInput();
-
-    const { deleteUser, deleteUserState } = useDeleteUser();
 
     const [matchingEmailError, setMatchingEmailError] = useState(null);
 
@@ -97,15 +95,19 @@ const ReauthWithoutPassword = ({ message1, message2, buttonText, onSuccessfulCom
                             payload: e.target.value 
                         })} 
                         autoFocus
+                        disabled={deleteUserState.isPending}
                     />
                 </label>
 
                 {!deleteUserState.isPending ? <button>{buttonText}</button> : <button disabled>Pending...</button>}
             </form>
 
-            {deleteUserState.error ? ( <p>{deleteUserState.error}</p> ) : (<div></div>)}
+            {deleteUserState.error ? (<p>{deleteUserState.error}</p>) : (<div></div>)}
+
             {reauthButtonClicked && userInputErrorMessage && ( <p>{userInputErrorMessage}</p> )}
+
             {matchingEmailError && !userInputErrorMessage && reauthButtonClicked && (<p>{matchingEmailError}</p>)}
+
         </>
     )
 }
