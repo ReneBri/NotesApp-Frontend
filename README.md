@@ -15,6 +15,7 @@ The object returned usually consists of three key value pairs:
 1. isPending - This tells us if the function called in the hook is still in process.
 2. error - This will display the error message should one be returned from Firebase.
 3. success - This tells us wether our function was successful or not. Its original default value is null.
+
 Using these three pieces of state we can conditionally display different jsx elements in our components depending on their values.
 
 **THE CLEAN-UP FUNCTION:**
@@ -44,6 +45,7 @@ All routing can be found within the App.js file and uses React Router v6. So far
 1. The Home page, which a user can only see when logged out.
 2. The Dashboard, which only a logged in user can see.
 3. The Account Settings page, which only a logged user can see.
+
 All other authentication services happen with the use of modals.
 
 **ROUTE GUARDING:**
