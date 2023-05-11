@@ -12,7 +12,7 @@ I have build this for multiple reasons:
 
 Please, if you come across this and have any feedback or ideas for improvement, I would be happy to hear from you.
 
-Covered so far in this documentation is:
+*Covered so far in this documentation is:*
 1. Authentication Hooks
 2. Routeing
 3. Modals
