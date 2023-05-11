@@ -57,7 +57,7 @@ const Component = () => {
 
 ***
 
- ## ROUTING
+ ## ROUTEING
 
 All routing can be found within the App.js file and uses React Router v6. So far there is only 3 different pages:
 1. The Home page, which a user can only see when logged out.
@@ -137,7 +137,6 @@ export LoginButton = () => {
 		<button>
 	)
 }
-
 ```
 
 So, this example is a component that consists of a button, which when clicked will open the ‘LoginModal’ modal.
@@ -206,7 +205,7 @@ In authContext.js you will find a function called onAuthStateChanged(), which is
 ```
 The purpose of this block is to, upon initial page load, reach out to Firebase and check whether or not a a user is already logged in. Firebase has state persistence for the user - meaning that if a user is signed in and reloads the page, they are still signed in and do not need to do so again. This is great, but our authContext doesn’t know that and upon reload, our authContext resets, giving the user object a value of null. So the purpose of this block is to reach out to Firebase, receive a response and then update our state accordingly, keeping us nicely in-sync with Firebase. 
 
-**authIsReady AND THE LOADING SCREEN**
+**AUTHISREADY AND THE LOADING SCREEN:**
 
 As you may have noticed - upon refresh, there is a loading screen. This serves multiple purposes, but the main one being that while React reaches out to the Firebase Authentication service by using onAuthStateChanged(), our AuthContext has its default values. Those being:
 ```
@@ -287,7 +286,7 @@ For the sake of the example, here's what the previous state could have been and 
 // Dispatch Object
 { type: ‘UPDATE_DISPLAY_NAME’, payload: newDisplayName }
 ```
-So, once the authStateReducer is called by our dispatch function, it checks for the matching type property in the switch statement, in this case its ‘UPDATE_DISPLAY_NAME’. Once it finds a match, it then returns the new state, in this case an object. It does this by spreading out the values of the old state with '...state'. This gives us the old, unchanged values of authIsReady and hasPassword. Then because we specify the 'user' property it will update that property. In this case, spreading out the old values of email and phoneNumber and then changing the displayName value to that of the 'action.payload', which we specified in the dispatch function. So this then will return the following:
+So, once the authStateReducer is called by our dispatch function, it checks for the matching 'type' property in the switch statement, in this case its ‘UPDATE_DISPLAY_NAME’. Once it finds a match, it then returns the new state, in this case an object. It does this by spreading out the values of the old state with '...state'. This gives us the old, unchanged values of authIsReady and hasPassword. Then because we specify the 'user' property it will update that property. In this case, spreading out the old values of email and phoneNumber and then changing the displayName value to that of the 'action.payload', which we specified in the dispatch function. So this then will return the following:
 ```
 { authIsReady: true, hasPassword: true, user: { displayName: 'New Display Name', email: 'rene@rene.com', phoneNumber: '1234' } }
 ```
@@ -296,4 +295,5 @@ So, once the authStateReducer is called by our dispatch function, it checks for 
 
 This was a hard one to explain. I hope it made sense? I feel that I could have either explained it better or perhaps just assumed more knowledge of the reader and shortened it a bit. If you have any suggestions how to make this clearer, please let me know.
 
+***
 
