@@ -95,7 +95,7 @@ This piece of code in App.js is what controls if a modal is rendered or not:
 ```
 {modalState && ReactDOM.createPortal(modalState, document.getElementById(‘modal-root’))}
 ```
-Here you can see that, if modalState exists, React will render the ‘modalState’ inside the element with the id of ‘modal-root’. This is why it is important the default value of modalState is null. Because if there is no value in modalState, no modal will be rendered. But if we keep in mind this above code example and we’re to set the value of modalState to a component (setModalState(<LoginModal />), for example) then the ‘modalState exists’ condition will be met and <LoginModal />, will be rendered inside of the ‘root-modal’ element.
+Here you can see that, if modalState exists, React will render the ‘modalState’ inside the element with the id of ‘modal-root’. This is why it is important the default value of modalState is null. Because if there is no value in modalState, no modal will be rendered. But if we keep in mind this above code example and we’re to set the value of modalState to a component (setModalState(<\LoginModal />), for example) then the ‘modalState exists’ condition will be met and <\LoginModal />, will be rendered inside of the ‘root-modal’ element.
 
 ***EXAMPLE:***
 
@@ -104,10 +104,10 @@ That was a lot to take in, so let’s look at a more real world example before w
 // This is the React hook that lets us hook into our context
 import { useContext } from ‘react’;
 
-// This is our custom context API we use to whether or not a modal renders
+// This is our custom context API we use to set whether or not a modal renders
 import { ModalContext } from ‘../../context/ModalContext’;
 
-// This is the modal we would want to have rendered
+// This is the modal we want to render
 import LoginModal from ‘../../components/modals/authentication-modals/LoginModal’;
 
 
@@ -133,6 +133,9 @@ First, we import three things: The useContext hook from React, our ModalContext 
 Then, inside of our component we want to be able to set the ‘modalState’. So, to access that we destructure our ModalContext using the useContext hook.
 
 Then, we set an onClick event on our button to set the modalState to our LoginModal component.
+
+Now, when we click the button, the LoginModal should render to the screen.
+
 
 If we then wanted to have an exit button on this modal we would simply have to add another component such as this:
 ```
