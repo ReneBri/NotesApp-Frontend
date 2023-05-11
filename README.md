@@ -179,7 +179,7 @@ export ExitButton = () => {
 
 This template is all about connecting to Firebase Authentication and authenticating users. We do this by making requests to Firebase (like user sign-up or logout) via our custom authentication hooks and in return we receive data back. That response is usually a user object, which contains data such as the users display name, email, phone number, etc. This is helpful, as there is a lot we can do with that information and we can find components all over our app which use it. So, if we were to just save this response from Firebase in state in the App.js file, our app would get messy very quickly with ‘prop drilling’ all over the place. To combat this we use the Context API to hold these responses and deliver them cleanly to wherever our app needs them. In this template it’s called the AuthContext and it wraps the entire app, as you can see from the index.js file.
 
-**AUTH CONTEXT VALUE PAIRS**
+**AUTH CONTEXT VALUE PAIRS:**
 
 Our auth context has three different value pairs:
 1. authIsReady: boolean - This confirms that our app has reached out to Firebase Authentication to see whether or not a user is logged in. The function that does this is asynchronous and while it is our fetching the data this keys value will be false. It is only once the data has been fetched and we know whether or not a user is logged in on this device that it will equal true.
@@ -202,4 +202,61 @@ In authContext.js you will find a function called onAuthStateChanged(), which is
         });
     }, []);
 ```
-The purpose of this block is to, upon initial page load, reach out to Firebase and check whether or not a a user is already logged in. Firebase has state persistence for the user - meaning that if a user is signed in and reloads the page, they are still signed in and do not need to do so again. This is great, but our authContext doesn’t know that and upon reload, our authContext resets, giving the user object a value of null. So the purpose of this block is to reach out to Firebase, receive a response and then update our state accordingly, keeping us nicely insync with Firebase. 
+The purpose of this block is to, upon initial page load, reach out to Firebase and check whether or not a a user is already logged in. Firebase has state persistence for the user - meaning that if a user is signed in and reloads the page, they are still signed in and do not need to do so again. This is great, but our authContext doesn’t know that and upon reload, our authContext resets, giving the user object a value of null. So the purpose of this block is to reach out to Firebase, receive a response and then update our state accordingly, keeping us nicely in-sync with Firebase. 
+
+**authIsReady AND THE LOADING SCREEN**
+
+As you may have noticed - upon refresh, there is a loading screen. This serves multiple purposes, but the main one being that while React reaches out to the Firebase Authentication service by using onAuthStateChanged(), our AuthContext has its default values. Those being:
+```
+{ user: null, authIsReady: false, hasPassword: null }
+
+```
+As you can see the default value for user is null. This means that if there were no loading screen, all of page conditionals rendered that depend on whether a user is logged in or not, will render with the 'user' value of 'null' in mind. This can lead to a very jumpy and non-user friendly experience. So to combat this, we use the fact that authIsReady’s default value is false, then only when the user is confirmed by Firebase does it become true.
+
+To take advantage of this, we use routing with this conditional set up in the App.js file:
+```
+{!user.authIsReady && < PreLoader />}
+
+```
+This is so that if the app is still reaching out to Firebase and is yet to receive a response, instead of loading our actual Home page or Dashboard, we load this component < PreLoader />, which is our loading screen. Not only does this help prevent a jumpy user experience, it also helps with visitor retention, as seemingly slow websites are a huge reason for people losing attention and clicking away.
+
+
+
+**UPDATING AUTH CONTEXT FROM WITHIN A HOOK OR COMPONENT:**
+
+Most times we call a function that connects to the Firebase Authentication service are from within a custom hook. There are a couple of components in this template which do so without utilising a hook but how we sync it with our AuthContext is the same. 
+
+Our AuthState is quite complex, so we manage it with a reducer. This means we send out dispatch functions in order to update our state. If we, for example, already have a user logged in and we want to update their display name. Once the user has typed in their new display name and we’ve validated it, we would have to send an update request to Firebase Authentication. If this is a successful request, that’s great BUT this means that it is only updated on the Firebase server and NOT our authState. This means that any components using our state to render that display name value will still be rendering the old display name. To keep our authState in-sync with the Firebase Authentication servers we need to also update our authState. Here is an example of how we do this:
+```
+// config
+import firebaseAuth from '../../../../../config/firebaseConfig';
+
+// context
+import { AuthContext } from '../../../../../context/authContext';
+
+// hooks
+import { useContext} from 'react';
+
+const ExampleComponent = ({ newDisplayName }) => {
+	
+	const { dispatchAuthState } = useContext(AuthContext);
+
+	const changeDisplayName = async () => {
+		try {
+			await firebaseAuth.currentUser.updateProfile({
+				displayName: newDisplayName
+			});
+			dispatchAuthState({ type: ‘UPDATE_DISPLAY_NAME’, payload: newDisplayName });
+		}
+		catch (err) {
+			console.log(err.message);
+		}
+
+	}
+	return (
+		<button onClick={() => {changeDisplayName}>Click me!<button>
+	)				
+}
+
+```
+

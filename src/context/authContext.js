@@ -14,6 +14,7 @@ import React, { useEffect, useReducer } from 'react';
 // Initialize the context
 export const AuthContext = React.createContext();
 
+// Function to check if user has signed up using password authorisation
 const checkIfUserHasPassword = (user) => {
     if(user){
         var providers = user.providerData.map(providerDetails => providerDetails.providerId);
