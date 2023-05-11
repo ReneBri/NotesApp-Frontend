@@ -49,7 +49,7 @@ const authStateReducer = (state, action) => {
 export const AuthContextProvider = props => {
 
     // Declare the authState with 'authIsReady' set to null. This is so we can block the loading of any data until Firebase has confirmed wether a user is already logged in or not. This helps keep restricted data restricted.
-    const [authState, dispatchAuthState] = useReducer(authStateReducer, { user: null, authIsReady: false });
+    const [authState, dispatchAuthState] = useReducer(authStateReducer, { user: null, authIsReady: false, hasPassword: null });
 
     // 'onAuthStateChanged' checks to see wether a user is already logged in upon load and 'dispatchAuth' updates the state accordingly. This is so that if a user refreshes the page and is already logged in, the state will update accordingly keeping Firebase and the clients local state, insync.
     useEffect(() => {

@@ -1,5 +1,19 @@
 # DOCUMENTATION
 
+## OVERVIEW
+
+This is a user login / authentication template built using React and Firebase Authentication v8.
+
+I have build this for multiple reasons:
+* To lower the time it takes to build app ideas in the future. Especially now to be able to approach others to work together on group projects.
+* Consolidate knowledge learnt during my courses.
+* Prove that I can do it.
+* Hopefully receive feedback from peers about what I can improve / what I did wrong.
+
+Please, if you come across this and have any feedback or ideas for improvement, I would be happy to hear from you.
+
+More documentation to come over the next week...
+
 ## AUTHENTICATION HOOKS
 
 All of the authentication hooks generally follow the same structure, with the exceptions of ‘useValidateUserInput’ & ‘useChangeEmail’, which I will give their own sections at the end.
@@ -22,7 +36,7 @@ Using these three pieces of state we can conditionally display different jsx ele
 
 **THE CLEAN-UP FUNCTION:**
 
- This is not returned but is present in our hook. It is the function ‘setIsCancelled(true);’ which is returned inside of the empty useEffect at the end of our hook. Since a useEffect clean-up function runs on mount and every subsequent re-render, at the start of our returned function we need to reset isCancelled to false.
+ This is not returned but is present in our hook. It is the function ‘setIsCancelled(true);’ which is returned inside of the empty useEffect at the end of our hook. Since a useEffect clean-up function runs on mount and at the start of every subsequent re-render, at the start of our returned function we need to reset isCancelled to false.
 
 **EXAMPLE:**
 
@@ -79,7 +93,7 @@ Is route guarding, so that the user cannot use the websites’ services unless t
 
 Modals play a big part in this User Login / Authentication template. They are for a large part how users sign-up, login & reauthenticate, etc. Modals visually sit above and cover everything else on the screen, so it only makes sense if the html we render shows this. If we, for example, just rendered our modal inside of whatever component we wanted to use it with, then the html would also be nested within that component. This technically can work but isn’t ideal for accessibility. Screen readers wouldn’t know that the modal is the most important and effectively the only thing on the screen. So to get around this in React we use portals. If you don’t know about portals and want to dive deeper, please check out the React documentation on the matter. But going further I will assume you know about them. In this project, the root element for our portals is located in the index.html - it’s a div with an id of ‘modal-root’. The portal itself is located App.js file - above any of the other routing.
 
-***MODAL CONTEXT API:***
+**MODAL CONTEXT API:**
 
 This template uses the context API to manage which modal should be rendering on the screen, if any should be rendered at all. Otherwise we would have to create portals or ‘prop drill” all over our app, which is far from ideal. So, to solve this we have a simple context API which exports two values, essentially the values that a ‘useState’ hook returns: 
 1. The modalState, which has a default value of null.
@@ -87,7 +101,7 @@ This template uses the context API to manage which modal should be rendering on 
 
 Furthermore, this ModalContextProvider is nested inside of the AuthContextProvider, so that all of our modals can have access to the User/Auth Context.
 
-***RENDERING A MODAL:***
+**RENDERING A MODAL:**
 
 In order to build your own or change these modals it’s important you know about how the portals work inside of the App.js file. 
 
@@ -97,7 +111,7 @@ This piece of code in App.js is what controls if a modal is rendered or not:
 ```
 Here you can see that, if modalState exists, React will render the ‘modalState’ inside the element with the id of ‘modal-root’. This is why it is important the default value of modalState is null. Because if there is no value in modalState, no modal will be rendered. But if we keep in mind this above code example and we’re to set the value of modalState to a component (setModalState(< LoginModal />), for example) then the ‘modalState exists’ condition will be met and < LoginModal />, will be rendered inside of the ‘root-modal’ element.
 
-***EXAMPLE:***
+**EXAMPLE:**
 
 That was a lot to take in, so let’s look at a more real world example before we continue and perhaps introduce how we would actually use it inside of a component:
 ```
@@ -158,4 +172,34 @@ export ExitButton = () => {
 	)
 }
 ```
+
 ***
+
+## AUTH CONTEXT API
+
+This template is all about connecting to Firebase Authentication and authenticating users. We do this by making requests to Firebase (like user sign-up or logout) via our custom authentication hooks and in return we receive data back. That response is usually a user object, which contains data such as the users display name, email, phone number, etc. This is helpful, as there is a lot we can do with that information and we can find components all over our app which use it. So, if we were to just save this response from Firebase in state in the App.js file, our app would get messy very quickly with ‘prop drilling’ all over the place. To combat this we use the Context API to hold these responses and deliver them cleanly to wherever our app needs them. In this template it’s called the AuthContext and it wraps the entire app, as you can see from the index.js file.
+
+**AUTH CONTEXT VALUE PAIRS**
+
+Our auth context has three different value pairs:
+1. authIsReady: boolean - This confirms that our app has reached out to Firebase Authentication to see whether or not a user is logged in. The function that does this is asynchronous and while it is our fetching the data this keys value will be false. It is only once the data has been fetched and we know whether or not a user is logged in on this device that it will equal true.
+2. user: { object } - This is the user object we receive from Firebase when a user signs-up, logs-in, reloads the page, etc. If no user is logged in or a user logs out, then the value is null. If there is a user logged in, we receive back an object full of the users information such as userId, displayName, email, etc.
+3. hasPassword: boolean - This looks through our user object to see if the user has signed up using the password method. Re-authentication methods required when a user wants to change their information or delete their account is different for different sign-up methods. For example a user who signed up with their Google account will have to re-authenticate differently to someone who signed up with a password.
+
+**INITIAL PAGE LOAD:**
+
+When a page loads for the first time, we need to find out whether or not a user is already logged in using this device. To do this we need to reach out to Firebase.
+
+In authContext.js you will find a function called onAuthStateChanged(), which is nested inside of a useEffect with an empty dependency array:
+```
+    useEffect(() => {
+        firebaseAuth.onAuthStateChanged((user) => {
+            if(user){
+                dispatchAuthState({type: 'AUTH_STATE_IS_READY', payload: {...user}});
+            }else{
+                dispatchAuthState({type: 'AUTH_STATE_IS_READY', payload: user});
+            }
+        });
+    }, []);
+```
+The purpose of this block is to, upon initial page load, reach out to Firebase and check whether or not a a user is already logged in. Firebase has state persistence for the user - meaning that if a user is signed in and reloads the page, they are still signed in and do not need to do so again. This is great, but our authContext doesn’t know that and upon reload, our authContext resets, giving the user object a value of null. So the purpose of this block is to reach out to Firebase, receive a response and then update our state accordingly, keeping us nicely insync with Firebase. 
