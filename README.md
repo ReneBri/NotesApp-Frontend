@@ -22,7 +22,7 @@ Using these three pieces of state we can conditionally display different jsx ele
 
 **EXAMPLE:**
 To give an example of how one of these hooks are used within a component I will use the ‘useLoginWithEmailAndPassword’ hook:
-
+```
 import { useLoginWithEmailAndPassword } from ‘../../hooks/authentication-hooks/useLoginWithEmailAndPassword’;
 
 const Component = () => {
@@ -34,6 +34,7 @@ const Component = () => {
 	)
 
 }	
+```
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
