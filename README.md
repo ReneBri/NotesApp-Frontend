@@ -179,6 +179,8 @@ export ExitButton = () => {
 
 This template is all about connecting to Firebase Authentication and authenticating users. We do this by making requests to Firebase (like user sign-up or logout) via our custom authentication hooks and in return we receive data back. That response is usually a user object, which contains data such as the users display name, email, phone number, etc. This is helpful, as there is a lot we can do with that information and we can find components all over our app which use it. So, if we were to just save this response from Firebase in state in the App.js file, our app would get messy very quickly with ‘prop drilling’ all over the place. To combat this we use the Context API to hold these responses and deliver them cleanly to wherever our app needs them. In this template it’s called the AuthContext and it wraps the entire app, as you can see from the index.js file.
 
+The AuthContext API is using a reducer to manage the user state. I will assume you know about how the useReducer hook works from here on in. If not please refer to the React docs.
+
 **AUTH CONTEXT VALUE PAIRS:**
 
 Our auth context has three different value pairs:
@@ -259,4 +261,39 @@ const UpdateDisplayNameButton = ({ newDisplayName }) => {
 	)				
 }
 ```
-Above is a example of a button component that when clicked will update our display name. As you can see, that for every Firebase action we have, we need a authContext dispatch function to mirror it. But this is only half the story, as the dispatch function is only a messanger... Over in our authContext.js we need to tell our reducer function what to do with the object received from the dispatchAuthState() function.
+Above is a example of a button component, that when clicked will update our display name. As you can see, that for every Firebase action we have, we need a authContext dispatch function to mirror it. But this is just half the story, as the dispatch function is only a messanger... Over in our authContext.js we need to tell our reducer function what to do with the object received from the dispatchAuthState() function.
+
+**AUTHSTATEREDUCER():**
+
+So, below is an example of a simplfied version of our reducer, which is located in the authContext.js file:
+```
+const authStateReducer = (state, action) => {
+    switch (action.type) {
+        case 'UPDATE_DISPLAY_NAME':
+            return { ...state, user: { ...state.user, displayName: action.payload } };
+        default: return { ...state };
+    }
+}
+```
+As you can see, the authStateReducer function receives two parameters:
+1. The previous state from before the update (called 'state') &
+2. The action, which is the object we sent to it via the dispatchAuthState() function (called 'action').
+
+For the sake of the example, here's what the previous state could have been and what we sent in the dispatch function:
+```
+// Previous state
+{ authIsReady: true, hasPassword: true, user: { displayName: 'Rene', email: 'rene@rene.com', phoneNumber: '1234' } }
+
+// Dispatch Object
+{ type: ‘UPDATE_DISPLAY_NAME’, payload: newDisplayName }
+```
+So, once the authStateReducer is called by our dispatch function, it checks for the matching type property in the switch statement, in this case its ‘UPDATE_DISPLAY_NAME’. Once it finds a match, it then returns the new state, in this case an object. It does this by spreading out the values of the old state with '...state'. This gives us the old, unchanged values of authIsReady and hasPassword. Then because we specify the 'user' property it will update that property. In this case, spreading out the old values of email and phoneNumber and then changing the displayName value to that of the 'action.payload', which we specified in the dispatch function. So this then will return the following:
+```
+{ authIsReady: true, hasPassword: true, user: { displayName: 'New Display Name', email: 'rene@rene.com', phoneNumber: '1234' } }
+```
+
+**CONCLUSION**
+
+This was a hard one to explain. I hope it made sense? I feel that I could have either explained it better or perhaps just assumed more knowledge of the reader and shortened it a bit. If you have any suggestions how to make this clearer, please let me know.
+
+
