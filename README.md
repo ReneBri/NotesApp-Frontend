@@ -209,18 +209,14 @@ The purpose of this block is to, upon initial page load, reach out to Firebase a
 As you may have noticed - upon refresh, there is a loading screen. This serves multiple purposes, but the main one being that while React reaches out to the Firebase Authentication service by using onAuthStateChanged(), our AuthContext has its default values. Those being:
 ```
 { user: null, authIsReady: false, hasPassword: null }
-
 ```
 As you can see the default value for user is null. This means that if there were no loading screen, all of page conditionals rendered that depend on whether a user is logged in or not, will render with the 'user' value of 'null' in mind. This can lead to a very jumpy and non-user friendly experience. So to combat this, we use the fact that authIsReady’s default value is false, then only when the user is confirmed by Firebase does it become true.
 
 To take advantage of this, we use routing with this conditional set up in the App.js file:
 ```
 {!user.authIsReady && < PreLoader />}
-
 ```
 This is so that if the app is still reaching out to Firebase and is yet to receive a response, instead of loading our actual Home page or Dashboard, we load this component < PreLoader />, which is our loading screen. Not only does this help prevent a jumpy user experience, it also helps with visitor retention, as seemingly slow websites are a huge reason for people losing attention and clicking away.
-
-
 
 **UPDATING AUTH CONTEXT FROM WITHIN A HOOK OR COMPONENT:**
 
@@ -237,15 +233,20 @@ import { AuthContext } from '../../../../../context/authContext';
 // hooks
 import { useContext} from 'react';
 
-const ExampleComponent = ({ newDisplayName }) => {
+// New component which has a prop of newDisplayName
+const UpdateDisplayNameButton = ({ newDisplayName }) => {
 	
+    // Here we destructure the dispatchAuthState function out of our AuthContext
 	const { dispatchAuthState } = useContext(AuthContext);
 
+    // Here is a function which we will call when the button is clicked
 	const changeDisplayName = async () => {
 		try {
+            // This updates the users name in Firebase
 			await firebaseAuth.currentUser.updateProfile({
 				displayName: newDisplayName
 			});
+            // This updates our authState
 			dispatchAuthState({ type: ‘UPDATE_DISPLAY_NAME’, payload: newDisplayName });
 		}
 		catch (err) {
@@ -254,9 +255,8 @@ const ExampleComponent = ({ newDisplayName }) => {
 
 	}
 	return (
-		<button onClick={() => {changeDisplayName}>Click me!<button>
+		<button onClick={() => {changeDisplayName}>Change Display Name<button>
 	)				
 }
-
 ```
-
+Above is a example of a button component that when clicked will update our display name. As you can see, that for every Firebase action we have, we need a authContext dispatch function to mirror it. But this is only half the story, as the dispatch function is only a messanger... Over in our authContext.js we need to tell our reducer function what to do with the object received from the dispatchAuthState() function.
