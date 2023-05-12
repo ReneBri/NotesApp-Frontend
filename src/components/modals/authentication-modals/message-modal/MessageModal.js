@@ -18,7 +18,6 @@ const MessageModal = ({ message, includeLoginButton }) => {
 
     const { setModalState } = useContext(ModalContext);
 
-
         return (
             <>
                 <ModalBackground />

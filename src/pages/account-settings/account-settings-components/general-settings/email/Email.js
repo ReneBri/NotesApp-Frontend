@@ -83,34 +83,34 @@ const Email = ({ infoToChange, setInfoToChange, email }) => {
         <>
             {infoToChange !== 'email' ? (
                 <div className={styles['info-wrapper']}>
-                <div className={styles['info-label-wrapper']}>
-                    <label htmlFor='user-email'>Email:</label>
-                    <p id='user-email'>{email}</p>
-                </div>
-                {user.hasPassword ? (
-                    <button 
-                        onClick={() => setInfoToChange('email')}
-                        >Edit
-                    </button>
-                ) : (
-                    <></>
-                )}
+                    <div className={styles['info-label-wrapper']}>
+                        <label htmlFor='user-email'>Email:</label>
+                        <p id='user-email'>{email}</p>
+                    </div>
+                    {user.hasPassword ? (
+                        <button 
+                            onClick={() => setInfoToChange('email')}
+                            >Edit
+                        </button>
+                    ) : (
+                        <></>
+                    )}
                 </div>
             ) : ( 
                 <>
                     <form className={styles['info-wrapper']}>
                         <div className={styles['info-label-wrapper']}>
-                        <label htmlFor='email'>Email:</label>
-                        <input 
-                            id='email'
-                            type='email'
-                            value={enteredEmailState.value}
-                            onChange={(e) => dispatchEnteredEmail({ 
-                            type: 'UPDATE_ENTERED_EMAIL', 
-                            payload: e.target.value 
-                            })} 
-                            autoFocus
-                        />
+                            <label htmlFor='email'>Email:</label>
+                            <input 
+                                id='email'
+                                type='email'
+                                value={enteredEmailState.value}
+                                onChange={(e) => dispatchEnteredEmail({ 
+                                type: 'UPDATE_ENTERED_EMAIL', 
+                                payload: e.target.value 
+                                })} 
+                                autoFocus
+                            />
                         </div>
                         <button onClick={handleSubmit}>Save</button>
                         <button onClick={(e) => {
@@ -125,12 +125,9 @@ const Email = ({ infoToChange, setInfoToChange, email }) => {
                         </button>
                     </form>
 
-                    {userInputErrorMessage && (
-                        <p>{userInputErrorMessage}</p>
-                    )}
-                    {changeEmailError && (
-                        <p>{changeEmailError}</p>
-                    )}
+                    {userInputErrorMessage && (<p className='error'>{userInputErrorMessage}</p>)}
+
+                    {changeEmailError && (<p className='error'>{changeEmailError}</p>)}
                 </>
             )}
         </>

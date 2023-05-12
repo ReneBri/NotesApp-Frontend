@@ -22,8 +22,10 @@ const initialPasswordState = {
 
 const ReauthenticateUser = ({ message1, message2, buttonText, onSuccessfulCompletion, deleteUserState, successModalMessage, email }) => {
 
+    // Must import these functions first, so that they can be used inside the reducer function
     const { validatePassword, userInputErrorMessage } = useValidateUserInput();
 
+    // Must import this inside of the component as it uses functions from the useValidateUserInput() hook
     const passwordReducer = (state, action) => {
         switch (action.type) {
             case 'CHANGE_PASSWORD_VALUE':
@@ -34,14 +36,19 @@ const ReauthenticateUser = ({ message1, message2, buttonText, onSuccessfulComple
         }
     }
 
-    const { reauthenticateUser, reauthState } = useReauthenticateUser();
-
+    // Input form state
     const [passwordState, dispatchPasswordState] = useReducer(passwordReducer, initialPasswordState);
 
+    // Re-authentication hook function & state
+    const { reauthenticateUser, reauthState } = useReauthenticateUser();
+
+    // Only when clicked will the component show error messages
     const [reauthButtonClicked, setReauthButtonClicked] = useState(false);
 
+    // To set modal state
     const { setModalState } = useContext(ModalContext);
 
+    // To use user object
     const { user } = useContext(AuthContext);
 
     const handleSubmit = async (e) => {
@@ -54,7 +61,7 @@ const ReauthenticateUser = ({ message1, message2, buttonText, onSuccessfulComple
         }
     }
 
-    // Set this is a useEffect because when loggin in when unverified the login modal would not close
+    // This triggers the onSuccesfulCompletion prop and sets the modal state upon successful re-authentication
     useEffect(() => {
         if(reauthState.success){
             onSuccessfulCompletion();
@@ -95,9 +102,9 @@ const ReauthenticateUser = ({ message1, message2, buttonText, onSuccessfulComple
 
                         </form>
 
-                        {reauthState.error ? (<p>{reauthState.error}</p>) : (<div></div>)}
+                        {reauthState.error ? (<p className='error'>{reauthState.error}</p>) : (<div></div>)}
 
-                        {reauthButtonClicked && userInputErrorMessage && ( <p>{userInputErrorMessage}</p> )}
+                        {reauthButtonClicked && userInputErrorMessage && ( <p className='error'>{userInputErrorMessage}</p> )}
                     </>
                 )}
 

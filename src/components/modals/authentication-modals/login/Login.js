@@ -6,6 +6,7 @@ import { ModalContext } from '../../../../context/modalContext';
 // hooks
 import { useState, useReducer, useEffect, useContext } from 'react';
 import { useLoginWithEmailAndPassword } from '../../../../hooks/authentication-hooks/useLoginWithEmailAndPassword';
+import { useValidateUserInput } from '../../../../hooks/authentication-hooks/useValidateUserInput';
 
 // components
 import ModalBackground from '../../../modals/modal-background/ModalBackground';
@@ -22,46 +23,40 @@ const initialInputFormState = {
     passwordIsValid: false
 }
 
-const inputFormReducer = (state, action) => {
-    switch (action.type) {
-        case 'CHANGE_EMAIL_VALUE':
-                return { ...state, email: action.payload, emailIsValid: handleValidateEmail(action.payload) };
-        case 'CHANGE_PASSWORD_VALUE':
-                return { ...state, password: action.payload, passwordIsValid: handleValidatePassword(action.payload) };
-        case 'CHECK_EMAIL_IS_VALID':
-            return { ...state, emailIsValid: handleValidateEmail(state.email) };
-        case 'CHECK_PASSWORD_IS_VALID':
-            return { ...state, passwordIsValid: handleValidatePassword(state.password) };
-        default: return { ...state };
-    }
-}
-
-const handleValidateEmail = (email) => {
-    if (email.trim().match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g)){
-        return true;
-    }else{
-        return false;
-    }
-}
-
-const handleValidatePassword = (password) => {
-    if (password.length !== 0){
-        return true;
-    }else{
-        return false;
-    }
-}
 
 const Login = () => {
 
+    // Must import these functions first, so that they can be used inside the reducer function
+    const { validateEmail, validatePassword } = useValidateUserInput();
+
+    // Must import this inside of the component as it uses functions from the useValidateUserInput() hook
+    const inputFormReducer = (state, action) => {
+        switch (action.type) {
+            case 'CHANGE_EMAIL_VALUE':
+                    return { ...state, email: action.payload, emailIsValid: validateEmail(action.payload) };
+            case 'CHANGE_PASSWORD_VALUE':
+                    return { ...state, password: action.payload, passwordIsValid: validatePassword(action.payload) };
+            case 'CHECK_EMAIL_IS_VALID':
+                return { ...state, emailIsValid: validateEmail(state.email) };
+            case 'CHECK_PASSWORD_IS_VALID':
+                return { ...state, passwordIsValid: validatePassword(state.password) };
+            default: return { ...state };
+        }
+    }
+
+    // Input form state
     const [inputFormState, dispatchInputFormState] = useReducer(inputFormReducer, initialInputFormState);
 
+    // Custom component error messages
     const [inputErrorMessage, setInputErrorMessage] = useState(null);
 
+    // Only when clicked will the component show error messages
     const [loginButtonClicked, setLoginButtonClicked] = useState(false)
 
+    // To set modal state
     const { setModalState } = useContext(ModalContext);
 
+    // Login with email and password state & function
     const { login, loginState } = useLoginWithEmailAndPassword();
 
     const handleSubmit = async (e) => {
@@ -75,7 +70,7 @@ const Login = () => {
         }
     }
 
-    // Set this is a useEffect because when loggin in when unverified the login modal would not close
+    //  Closes the modal after a successful login
     useEffect(() => {
         if(loginState.success){
             setModalState(null);
@@ -83,6 +78,7 @@ const Login = () => {
     }, [loginState.success, setModalState])
 
 
+    // When dealing with the multi line form input, to send error message to the user we cannot use the supplied userInputErrorState which comes from the hook itself. We must use a custom error message.
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const formIsValid = () => {
             if(!inputFormState.emailIsValid){
@@ -97,6 +93,7 @@ const Login = () => {
             }
     }
 
+    // Checks form is valid and throws custom error messages to the user depending on the input
     useEffect(() => {
             formIsValid();
     }, [inputFormState, formIsValid])
@@ -138,9 +135,11 @@ const Login = () => {
 
                 </form>
 
-                {loginState.error ? ( <p>{loginState.error}</p> ) : (<div></div>)}
+                {loginState.error ? ( <p className='error'>{loginState.error}</p> ) : (<div></div>)}
 
-                {loginButtonClicked && inputErrorMessage && ( <p>{inputErrorMessage}</p> )}
+                {/* {loginButtonClicked && inputErrorMessage && ( <p className='error'>{inputErrorMessage}</p> )} */}
+
+                {loginButtonClicked && inputErrorMessage && ( <p className='error'>{inputErrorMessage}</p> )}
 
                 <ModalCardDivider />
 

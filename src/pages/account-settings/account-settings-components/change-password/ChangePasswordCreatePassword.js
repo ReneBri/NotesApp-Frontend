@@ -100,9 +100,9 @@ const ChangePasswordCreatePassword = () => {
                     />
                 </label>
 
-                {createPasswordForExistingUserState.error && <p>{createPasswordForExistingUserState.error}</p>}
+                {createPasswordForExistingUserState.error && <p className='error'>{createPasswordForExistingUserState.error}</p>}
 
-                {createPasswordButtonIsClicked && userInputErrorMessage && (<p>{userInputErrorMessage}</p>)}
+                {createPasswordButtonIsClicked && userInputErrorMessage && (<p className='error'>{userInputErrorMessage}</p>)}
                 {createPasswordButtonIsClicked && !isValid ? (
                     <button disabled>Create Password</button> 
                     ) : ( 

@@ -109,9 +109,7 @@ const DisplayName = ({ infoToChange, setInfoToChange, displayName }) => {
                         >Cancel
                         </button>
                     </form>
-                    {userInputErrorMessage && (
-                        <p>{userInputErrorMessage}</p>
-                    )}
+                    {userInputErrorMessage && (<p className='error'>{userInputErrorMessage}</p>)}
                 </>
             )}
         </>

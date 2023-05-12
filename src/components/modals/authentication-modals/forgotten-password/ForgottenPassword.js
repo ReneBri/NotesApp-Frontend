@@ -86,8 +86,8 @@ const ForgottenPassword = () => {
                     {!passwordResetEmailState.isPending ? <button>Let's Go!</button> : <button disabled>Pending...</button>}
                 </form>
 
-                {passwordResetEmailState.error ? ( <p>{passwordResetEmailState.error}</p> ) : (<div></div>)}
-                {sendButtonClicked && userInputErrorMessage && ( <p>{userInputErrorMessage}</p> )}
+                {passwordResetEmailState.error ? ( <p className='error'>{passwordResetEmailState.error}</p> ) : (<div></div>)}
+                {sendButtonClicked && userInputErrorMessage && ( <p className='error'>{userInputErrorMessage}</p> )}
 
             </ModalCard>
     

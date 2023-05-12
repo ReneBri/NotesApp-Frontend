@@ -23,7 +23,7 @@ const reduceSignupState = (state, action) => {
         case 'ATTEMPT_SIGNUP':
             return { isPending: true, error: null, success: null };
         case 'SIGNUP_COMPLETE':
-            return { isPending: true, error: 'We have sent you an email. Please go to it to verify your email address.', success: true };
+            return { isPending: true, error: null, success: true };
         case 'SIGNUP_ERROR':
             return { isPending: false, error: action.payload, success: false };
         default: 

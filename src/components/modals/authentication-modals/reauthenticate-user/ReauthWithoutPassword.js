@@ -5,7 +5,6 @@
 // hooks
 import { useContext, useReducer, useState, useEffect, useCallback } from "react";
 import { useValidateUserInput } from "../../../../hooks/authentication-hooks/useValidateUserInput";
-import { useDeleteUser } from '../../../../hooks/authentication-hooks/useDeleteUser';
 
 // context
 import { ModalContext } from "../../../../context/modalContext";
@@ -21,10 +20,10 @@ const initialEmailState = {
 
 const ReauthWithoutPassword = ({ message1, message2, buttonText, onSuccessfulCompletion, deleteUserState, successModalMessage, email }) => {
 
+    // Must import these functions first, so that they can be used inside the reducer function. We use the state from this this timebecause there is only one user input
     const { validateEmail, userInputErrorMessage } = useValidateUserInput();
 
-    const [matchingEmailError, setMatchingEmailError] = useState(null);
-
+    // Must import this inside of the component as it uses functions from the useValidateUserInput() hook
     const reduceEmailState = (state, action) => {
         switch (action.type){
             case 'CHANGE_EMAIL_VALUE':
@@ -36,11 +35,17 @@ const ReauthWithoutPassword = ({ message1, message2, buttonText, onSuccessfulCom
         }
     }
 
-    const { setModalState } = useContext(ModalContext);
+    // Input form state
+    const [emailState, dispatchEmailState] = useReducer(reduceEmailState, initialEmailState);
 
+    // Set custom error incase entered email does not match the saved user email
+    const [matchingEmailError, setMatchingEmailError] = useState(null);
+
+    // Only when clicked will the component show error messages
     const [reauthButtonClicked, setReauthButtonClicked] = useState(false);
 
-    const [emailState, dispatchEmailState] = useReducer(reduceEmailState, initialEmailState);
+    // To set modal state
+    const { setModalState } = useContext(ModalContext);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -49,7 +54,7 @@ const ReauthWithoutPassword = ({ message1, message2, buttonText, onSuccessfulCom
         if (!reauthButtonClicked){
             setReauthButtonClicked(true);
         }
-        // Checks is the emailState is valid and if so checks if the emails match
+        // Checks if the emailState is valid and if so checks if the emails match
         if(emailState.isValid){
             const emailsMatch = checkEmailsMatch();
             if(emailsMatch){
@@ -61,7 +66,7 @@ const ReauthWithoutPassword = ({ message1, message2, buttonText, onSuccessfulCom
         }
     }
 
-    // Look into useCallback
+    // We use useCallback here because this function would be re-created on every re-render. This in turn would trigger the useEffect that is dependent on it every re-render, which is not what we want. Instead this function will only be re-created when items in its dependency array change.
     const checkEmailsMatch = useCallback(() => {
         if(!deleteUserState.success){
             if(emailState.value.toLowerCase() === email){
@@ -107,11 +112,11 @@ const ReauthWithoutPassword = ({ message1, message2, buttonText, onSuccessfulCom
                 {!deleteUserState.isPending ? <button>{buttonText}</button> : <button disabled>Pending...</button>}
             </form>
 
-            {deleteUserState.error ? (<p>{deleteUserState.error}</p>) : (<div></div>)}
+            {deleteUserState.error ? (<p className='error'>{deleteUserState.error}</p>) : (<div></div>)}
 
-            {reauthButtonClicked && userInputErrorMessage && ( <p>{userInputErrorMessage}</p> )}
+            {reauthButtonClicked && userInputErrorMessage && ( <p className='error'>{userInputErrorMessage}</p> )}
 
-            {matchingEmailError && !userInputErrorMessage && reauthButtonClicked && (<p>{matchingEmailError}</p>)}
+            {matchingEmailError && !userInputErrorMessage && reauthButtonClicked && (<p className='error'>{matchingEmailError}</p>)}
 
         </>
     )

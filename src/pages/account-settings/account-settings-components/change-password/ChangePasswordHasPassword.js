@@ -26,7 +26,7 @@ const ChangePasswordHasPassword = () => {
         <>
             {passwordResetEmailState.success === null && <p>Click button to send password reset email.</p>}
             {passwordResetEmailState.success && <p>{`Password reset email sent to ${user.user.email}`}</p>}
-            {passwordResetEmailState.success === false && <p>Password reset email failed to send.</p>}
+            {passwordResetEmailState.success === false && <p className='error'>Password reset email failed to send.</p>}
             {!passwordResetEmailState.isPending ? <button onClick={handleClick}>Send</button> : <button disabled>Sending</button>}
         </>
     )
