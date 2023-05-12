@@ -39,8 +39,8 @@ export const useReauthenticateUser = () => {
     // Saftey measure for unmounting. setIsCancelled is used in the useEffect clean-up function below
     const [isCancelled, setIsCancelled] = useState(false);
 
-    // This is so we can update the React state
-    const { user, dispatchAuthState } = useContext(AuthContext);
+    // This is so we can access the current users email
+    const { user } = useContext(AuthContext);
 
     // Main exported function we use for login
     const reauthenticateUser = async (password) => {

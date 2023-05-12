@@ -24,17 +24,8 @@ const initialStateOfPasswords = {
 
 const ChangePasswordCreatePassword = () => {
 
+    // Import user input validation functions and state from useValidateUserInput()
     const { validatePasswordForSignup, validateMatchingPasswordForSignup, userInputErrorMessage } = useValidateUserInput();
-
-    const [createPasswordButtonIsClicked, setCreatePasswordButtonIsClicked] = useState(false);
-
-    const { createPasswordForExistingUser, createPasswordForExistingUserState } = useCreatePasswordForExistingUser();
-
-    const { setModalState } = useContext(ModalContext);
-
-    const { dispatchAuthState } = useContext(AuthContext);
-
-    const [isValid, setIsValid] = useState(false);
 
     const reduceStateOfPasswords = (state, action) => {
         switch (action.type) {
@@ -46,14 +37,30 @@ const ChangePasswordCreatePassword = () => {
         }
     }
 
+    // State for user input
     const [stateOfPasswords, dispatchStateOfPasswords] = useReducer(reduceStateOfPasswords, initialStateOfPasswords);
+
+    // Only once the submit button is clicked React show the user input error message
+    const [createPasswordButtonIsClicked, setCreatePasswordButtonIsClicked] = useState(false);
+
+    // Password creation hook
+    const { createPasswordForExistingUser, createPasswordForExistingUserState } = useCreatePasswordForExistingUser();
+
+    // Modal context to set modal
+    const { setModalState } = useContext(ModalContext);
+
+    // To update our AuthContext
+    const { dispatchAuthState } = useContext(AuthContext);
+
+    // Boolean for our form check. Only if form is valid can we submit out form
+    const [formIsValid, setFormIsValid] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if(!createPasswordButtonIsClicked){
             setCreatePasswordButtonIsClicked(true);
         }
-        if(isValid){
+        if(formIsValid){
             await createPasswordForExistingUser(stateOfPasswords.passwordOne);
             dispatchAuthState({ type: 'CREATE_PASSWORD_FOR_EXISTING_USER' });
             setModalState(<MessageModal 
@@ -64,9 +71,9 @@ const ChangePasswordCreatePassword = () => {
     
     useEffect(() => {
         if(stateOfPasswords.passwordOneIsValid && stateOfPasswords.passwordTwoIsValid){
-            setIsValid(true);
+            setFormIsValid(true);
         } else {
-            setIsValid(false);
+            setFormIsValid(false);
         }
     }, [stateOfPasswords.passwordOneIsValid, stateOfPasswords.passwordTwoIsValid])
 
@@ -103,7 +110,7 @@ const ChangePasswordCreatePassword = () => {
                 {createPasswordForExistingUserState.error && <p className='error'>{createPasswordForExistingUserState.error}</p>}
 
                 {createPasswordButtonIsClicked && userInputErrorMessage && (<p className='error'>{userInputErrorMessage}</p>)}
-                {createPasswordButtonIsClicked && !isValid ? (
+                {createPasswordButtonIsClicked && !formIsValid ? (
                     <button disabled>Create Password</button> 
                     ) : ( 
                     <button disabled={createPasswordForExistingUserState.isPending}>Create Password</button>

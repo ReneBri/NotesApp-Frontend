@@ -35,11 +35,13 @@ export const useCreatePasswordForExistingUser = () => {
 
     const [createPasswordForExistingUserState, dispatchCreatePasswordState] = useReducer(reduceCreatePasswordState, initialCreatePasswordState);
 
+    // Saftey measure for unmounting. setIsCancelled is used in the useEffect clean-up function below
     const [isCancelled, setIsCancelled] = useState(false);
 
+    // So we can update the AuthState
     const { dispatchAuthState } = useContext(AuthContext);
 
-
+    // Main exported function
     const createPasswordForExistingUser = async (newPassword) => {
 
         setIsCancelled(false);
@@ -47,6 +49,7 @@ export const useCreatePasswordForExistingUser = () => {
         dispatchCreatePasswordState({ type: 'ATTEMPT_CREATE_PASSWORD' });
 
         try {
+            // Adds a new password to the user data in Firebase
             await firebaseAuth.currentUser.updatePassword(newPassword);
             if(!isCancelled){
                 dispatchCreatePasswordState({ type: 'CREATE_PASSWORD_COMPLETE' });
@@ -61,6 +64,7 @@ export const useCreatePasswordForExistingUser = () => {
         
     }
 
+    // Clean-up function
     useEffect(() => {
         return () => setIsCancelled(true);
     });

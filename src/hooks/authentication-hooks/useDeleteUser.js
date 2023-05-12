@@ -34,11 +34,13 @@ export const useDeleteUser = () => {
 
     const [deleteUserState, dispatchDeleteUserState] = useReducer(reduceDeleteUserState, initialDeleteUserState);
 
+    // Saftey measure for unmounting. setIsCancelled is used in the useEffect clean-up function below
     const [isCancelled, setIsCancelled] = useState(false);
 
+    // So we can update the AuthState
     const { dispatchAuthState } = useContext(AuthContext);
 
-
+    // Main exported function
     const deleteUser = async () => {
 
         setIsCancelled(false);
@@ -46,6 +48,7 @@ export const useDeleteUser = () => {
         dispatchDeleteUserState({ type: 'ATTEMPT_DELETE_USER' });
 
         try {
+            // Deletes current user from the Firebase authentication database
             await firebaseAuth.currentUser.delete();
             if(!isCancelled){
                 dispatchDeleteUserState({ type: 'DELETE_USER_COMPLETE' });
@@ -60,6 +63,7 @@ export const useDeleteUser = () => {
         
     }
 
+    // Clean-up function
     useEffect(() => {return () => setIsCancelled(true)});
 
     return { deleteUser, deleteUserState };
