@@ -4,7 +4,7 @@
 
 This is a user login / authentication template built using React and Firebase Authentication v8.
 
-Live link to a demo can be found [here](https://notesapp-4d3bb.web.app/).
+Live link to a demo can be found <a href="https://notesapp-4d3bb.web.app/" target="_blank">here</a>.
 
 I have build this for multiple reasons:
 * To lower the time it takes to build app ideas in the future. Especially now to be able to approach others to work together on group projects.
