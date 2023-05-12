@@ -88,10 +88,12 @@ const Email = ({ infoToChange, setInfoToChange, email }) => {
                         <p id='user-email'>{email}</p>
                     </div>
                     {user.hasPassword ? (
-                        <button 
-                            onClick={() => setInfoToChange('email')}
-                            >Edit
-                        </button>
+                        <div className={styles['button-wrapper']}>
+                            <button 
+                                onClick={() => setInfoToChange('email')}
+                                >Edit
+                            </button>
+                        </div>
                     ) : (
                         <></>
                     )}

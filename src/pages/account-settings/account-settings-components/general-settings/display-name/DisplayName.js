@@ -79,7 +79,9 @@ const DisplayName = ({ infoToChange, setInfoToChange, displayName }) => {
                         <label htmlFor='display-name'>Display Name:</label>
                         <p id='display-name'>{displayName}</p>
                     </div>
-                    <button onClick={() => setInfoToChange('display-name')}>Edit</button>
+                    <div className={styles['button-wrapper']}>
+                        <button onClick={() => setInfoToChange('display-name')}>Edit</button>
+                    </div>
                 </div>
             ) : ( 
                 <>
