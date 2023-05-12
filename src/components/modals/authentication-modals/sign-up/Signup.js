@@ -56,10 +56,7 @@ const Signup = () => {
     const [inputErrorMessage, setInputErrorMessage] = useState(null);
 
     // Only once the submit button is clicked React show the user input error message
-    const [signupButtonClicked, setSignupButtonClicked] = useState(false);
-
-    // Disables inputs after submit begins
-    const [inputIsDisabled, setInputIsDisabled] = useState(false);
+    const [signupButtonClicked, setSignupButtonClicked] = useState(false); 
 
     // Signup hook
     const { signupState, signupWithEmailAndPassword } = useSignupWithEmailAndPassword();
@@ -109,14 +106,6 @@ const Signup = () => {
             formIsValid();
     }, [inputFormState, formIsValid])
 
-    // Disables user inputs after button is clicked but allows users to alter the input fields should the signup fail
-    // useEffect(() => {
-    //     if(signupState.success === true || signupState.isPending === true){
-    //         setInputIsDisabled(true);
-    //     }else{
-    //         setInputIsDisabled(false);
-    //     }
-    // }, [signupState.success, signupState.isPending])
 
     return (
         <>

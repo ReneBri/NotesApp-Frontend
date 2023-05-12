@@ -5,7 +5,6 @@ import firebaseAuth from "../../../../config/firebaseConfig";
 
 // context
 import { ModalContext } from "../../../../context/modalContext";
-import { AuthContext } from "../../../../context/authContext";
 
 // hooks
 import { useContext } from "react";
@@ -18,17 +17,14 @@ import ModalCard from "../../modal-card/ModalCard";
 
 const UnverifiedEmail = () => {
 
+    // To set modal state
     const { setModalState } = useContext(ModalContext);
-
-    const { user } = useContext(AuthContext);
 
     const handleSendEmailVerification = async () => {
         await firebaseAuth.currentUser.sendEmailVerification();
         setModalState(<Login />);
     }
 
-    // UNSURE IF THIS IF STATEMENT IS NECCESSARY |||||||| CHECK IN FUTURE
-    if(user){
         return (
             <>
                 <ModalBackground />
@@ -44,9 +40,7 @@ const UnverifiedEmail = () => {
         
             </>
         )
-    }else{
-        return 
-    }
+
     
 }
 

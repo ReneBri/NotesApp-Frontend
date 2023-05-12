@@ -112,17 +112,19 @@ const Email = ({ infoToChange, setInfoToChange, email }) => {
                                 autoFocus
                             />
                         </div>
-                        <button onClick={handleSubmit}>Save</button>
-                        <button onClick={(e) => {
-                            e.preventDefault();
-                            dispatchEnteredEmail({ 
-                            type: 'UPDATE_ENTERED_EMAIL', 
-                            payload: email 
-                            });
-                            setInfoToChange(null)}
-                            }
-                            >Cancel
-                        </button>
+                        <div className={styles['button-wrapper']}>
+                            <button onClick={handleSubmit}>Save</button>
+                            <button onClick={(e) => {
+                                e.preventDefault();
+                                dispatchEnteredEmail({ 
+                                type: 'UPDATE_ENTERED_EMAIL', 
+                                payload: email 
+                                });
+                                setInfoToChange(null)}
+                                }
+                                >Cancel
+                            </button>
+                        </div>
                     </form>
 
                     {userInputErrorMessage && (<p className='error'>{userInputErrorMessage}</p>)}

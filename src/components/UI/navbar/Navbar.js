@@ -22,7 +22,9 @@ import { Link } from "react-router-dom";
 const Navbar = () => {
 
     const { setModalState } = useContext(ModalContext);
+
     const { user } = useContext(AuthContext);
+    
     const { logout } = useLogout();
 
     return (

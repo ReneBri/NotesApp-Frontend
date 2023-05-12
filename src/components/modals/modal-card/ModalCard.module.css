@@ -1,12 +1,11 @@
 
 .modalCard {
     background-color: white;
-    border-radius: 16px;
+    border-radius: 1em;
     box-shadow: 1px 1px 10px black;
-    padding: 48px;
-    padding-bottom: 48px;
-    max-width: 400px;
-    min-width: 360px;
+    padding: 3em;
+    padding-bottom: 3em;
+    max-width: 22em;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -17,8 +16,8 @@
 .modalCard object {
     color: black;
     position: absolute;
-    top: 8px;
-    right: 8px;
+    top: .5em;
+    right: .5em;
 }
 
 .modalCard form {
@@ -41,14 +40,14 @@
 }
 
 .modalCard button {
-    margin-top: 4px;
+    margin-top: .25em;
 }
 
 .modalCard .close {
-    height: 24px;
-    width: 24px;
+    height: 1.5em;
+    width: 1.5em;
     position: absolute;
-    top: 16px;
-    right: 16px;
+    top: 1em;
+    right: 1em;
     cursor: pointer;
 }
