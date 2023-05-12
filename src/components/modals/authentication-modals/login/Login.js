@@ -52,7 +52,7 @@ const handleValidatePassword = (password) => {
     }
 }
 
-const Login = props => {
+const Login = () => {
 
     const [inputFormState, dispatchInputFormState] = useReducer(inputFormReducer, initialInputFormState);
 

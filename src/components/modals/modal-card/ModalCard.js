@@ -13,7 +13,7 @@ import { ModalContext } from '../../../context/modalContext';
 // components
 
 
-const ModalCard = props => {
+const ModalCard = ({ children }) => {
 
     const { setModalState } = useContext(ModalContext);
 
@@ -25,7 +25,7 @@ const ModalCard = props => {
                 onClick={() => {setModalState(null)}} 
                 alt='Exit the modal here'
             />
-            {props.children}
+            {children}
         </div>
     )
 }

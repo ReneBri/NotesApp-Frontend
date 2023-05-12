@@ -29,7 +29,7 @@ const initialInputFormState = {
 }
 
 
-const Signup = props => {
+const Signup = () => {
 
     // Import authentication validity checking functions from hook
     const { validateDisplayName, validateEmail, validatePasswordForSignup, validateMatchingPasswordForSignup } = useValidateUserInput();
@@ -134,6 +134,7 @@ const Signup = props => {
                                 type: 'CHANGE_DISPLAYNAME_VALUE',
                                 payload: e.target.value
                             })}
+                            autoFocus
                         />
                     </label>
 

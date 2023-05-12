@@ -17,7 +17,7 @@ import ChangePassword from './account-settings-components/change-password/Change
 import DeleteAccount from './account-settings-components/delete-account/DeleteAccount';
 
 
-const AccountSettings = props => {
+const AccountSettings = () => {
 
     const { user } = useContext(AuthContext);
 

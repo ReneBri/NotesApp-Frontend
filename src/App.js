@@ -25,31 +25,31 @@ import PreLoader from './components/UI/pre-loader/PreLoader';
 
 function App() {
 
-  const { user } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
 
-  const { modalState } = useContext(ModalContext);
+    const { modalState } = useContext(ModalContext);
 
-  return (
+    return (
 
-    <div className="App">
+        <div className="App">
 
-      {modalState && ReactDOM.createPortal(modalState, document.getElementById('modal-root'))}
+            {modalState && ReactDOM.createPortal(modalState, document.getElementById('modal-root'))}
 
-      {!modalState && user.user !== null && !user.user.emailVerified && ReactDOM.createPortal(<UnverifiedEmail />, document.getElementById('modal-root'))}
+            {!modalState && user.user !== null && !user.user.emailVerified && ReactDOM.createPortal(<UnverifiedEmail />, document.getElementById('modal-root'))}
 
-      {!user.authIsReady && <PreLoader />}
-      {user.authIsReady && (
-        <BrowserRouter>
-        <Navbar />
-          <Routes>
-            <Route path="/" element={ !user.user ? <Home /> : <Dashboard /> } />
-            <Route path="/account-settings" element={ !user.user ? <Navigate replace to='/' /> : <AccountSettings /> } />
-          </Routes>
-        </BrowserRouter>
-      )}
+            {!user.authIsReady && <PreLoader />}
+            {user.authIsReady && (
+                <BrowserRouter>
+                <Navbar />
+                <Routes>
+                    <Route path="/" element={ !user.user ? <Home /> : <Dashboard /> } />
+                    <Route path="/account-settings" element={ !user.user ? <Navigate replace to='/' /> : <AccountSettings /> } />
+                </Routes>
+                </BrowserRouter>
+            )}
 
-    </div>
-  );
+        </div>
+    );
 }
 
 export default App;

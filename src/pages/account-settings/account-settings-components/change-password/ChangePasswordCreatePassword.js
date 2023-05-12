@@ -1,11 +1,17 @@
+// styles
 import styles from './ChangePassword.module.css';
+// config
 
+// hooks
 import { useState, useContext, useEffect, useReducer } from 'react';
 import { useValidateUserInput } from '../../../../hooks/authentication-hooks/useValidateUserInput';
 import { useCreatePasswordForExistingUser } from '../../../../hooks/authentication-hooks/useCreatePasswordForExistingUser';
 
+// context
 import { ModalContext } from '../../../../context/modalContext';
 import { AuthContext } from '../../../../context/authContext';
+
+// components
 import MessageModal from '../../../../components/modals/authentication-modals/message-modal/MessageModal';
 
 

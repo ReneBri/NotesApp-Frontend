@@ -13,7 +13,7 @@ import Login from "../../components/modals/authentication-modals/login/Login";
 import Signup from "../../components/modals/authentication-modals/sign-up/Signup";
 
 
-const Home = props => {
+const Home = () => {
 
     const { setModalState } = useContext(ModalContext);
 

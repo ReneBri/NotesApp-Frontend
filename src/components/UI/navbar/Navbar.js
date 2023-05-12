@@ -19,7 +19,7 @@ import Signup from "../../modals/authentication-modals/sign-up/Signup";
 import { Link } from "react-router-dom";
 
 
-const Navbar = props => {
+const Navbar = () => {
 
     const { setModalState } = useContext(ModalContext);
     const { user } = useContext(AuthContext);

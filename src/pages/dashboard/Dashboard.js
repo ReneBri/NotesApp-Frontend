@@ -12,7 +12,7 @@ import { useLogout } from '../../hooks/authentication-hooks/useLogout';
 // components
 
 
-const Dashboard = props => {
+const Dashboard = () => {
     
     const { logout } = useLogout();
     const { user } = useContext(AuthContext);

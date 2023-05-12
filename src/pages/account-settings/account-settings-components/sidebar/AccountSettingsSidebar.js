@@ -1,4 +1,13 @@
+// styles
 import styles from './AccountSettingsSidebar.module.css';
+
+// config
+
+// hooks
+
+// context
+
+// components
 
 
 const AccountSettingsSidebar = ({ setInformationSelection }) => {

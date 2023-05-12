@@ -1,3 +1,4 @@
+// styles & icons
 import googleIcon from '../../../../media/icons/googleIcon.svg';
 import styles from './GoogleAuthenticationButton.module.css';
 

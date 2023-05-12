@@ -22,11 +22,11 @@ const GeneralSettings = ({ displayName, email }) => {
 
     <div className={styles['account-settings-content']}>
 
-      <h2>General Settings</h2>
-      
-      <DisplayName infoToChange={infoToChange} setInfoToChange={setInfoToChange} displayName={displayName} />
-      
-      <Email infoToChange={infoToChange} setInfoToChange={setInfoToChange} email={email} />
+        <h2>General Settings</h2>
+        
+        <DisplayName infoToChange={infoToChange} setInfoToChange={setInfoToChange} displayName={displayName} />
+        
+        <Email infoToChange={infoToChange} setInfoToChange={setInfoToChange} email={email} />
 
     </div>
   )

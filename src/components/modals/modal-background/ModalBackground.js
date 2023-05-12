@@ -12,7 +12,7 @@ import { useContext } from 'react';
 // components
 
 
-const ModalBackground = props => {
+const ModalBackground = ({ children }) => {
 
     const { setModalState } = useContext(ModalContext);
 
@@ -21,7 +21,7 @@ const ModalBackground = props => {
             className={styles.modalBackground}
             onClick={() => setModalState(null)}
         >
-            {props.children}
+            {children}
         </div>
     )
 }

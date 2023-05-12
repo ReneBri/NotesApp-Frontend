@@ -16,7 +16,7 @@ import ModalBackground from "../../modal-background/ModalBackground";
 import ModalCard from "../../modal-card/ModalCard";
 
 
-const UnverifiedEmail = props => {
+const UnverifiedEmail = () => {
 
     const { setModalState } = useContext(ModalContext);
 

@@ -1,4 +1,13 @@
+// styles
 import styles from './ModalCardDivider.module.css';
+
+// config
+
+// hooks
+
+// context
+
+// components
 
 const ModalCardDivider = () => {
 

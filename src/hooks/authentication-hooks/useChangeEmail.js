@@ -1,6 +1,15 @@
+// styles
+
+// config
+import firebaseAuth from "../../config/firebaseConfig";
+
+// hooks
 import { useState } from "react";
 
-import firebaseAuth from "../../config/firebaseConfig";
+// context
+
+// components
+
 
 export const useChangeEmail = () => {
 

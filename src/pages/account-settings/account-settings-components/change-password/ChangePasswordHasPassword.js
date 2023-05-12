@@ -1,7 +1,15 @@
+// styles
+
+// config
+
+// hooks
 import { useSendPasswordResetEmail } from '../../../../hooks/authentication-hooks/useSendPasswordResetEmail';
 
+// context
 import { AuthContext } from '../../../../context/authContext';
 import { useContext } from 'react';
+
+// components
 
 
 const ChangePasswordHasPassword = () => {

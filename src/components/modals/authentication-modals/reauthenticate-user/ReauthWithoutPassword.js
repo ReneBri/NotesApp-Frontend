@@ -1,11 +1,16 @@
+// styles
 
+// config
+
+// hooks
 import { useContext, useReducer, useState, useEffect, useCallback } from "react";
 import { useValidateUserInput } from "../../../../hooks/authentication-hooks/useValidateUserInput";
 import { useDeleteUser } from '../../../../hooks/authentication-hooks/useDeleteUser';
 
-
+// context
 import { ModalContext } from "../../../../context/modalContext";
 
+// components
 import MessageModal from "../message-modal/MessageModal";
 
 

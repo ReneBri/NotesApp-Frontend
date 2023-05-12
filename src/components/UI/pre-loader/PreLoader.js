@@ -1,7 +1,16 @@
 // styles & icons
-import loading from '../../../media/icons/PreLoader.svg';
+import loading from '../../../media/icons/preLoader.svg';
 import styles from './PreLoader.module.css';
 import classes from '../navbar/Navbar.module.css';
+
+// config
+
+// hooks
+
+// context
+
+// components
+
 
 const PreLoader = () => {
 

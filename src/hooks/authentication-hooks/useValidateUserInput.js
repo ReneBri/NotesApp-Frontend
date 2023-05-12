@@ -1,4 +1,13 @@
+// styles
+
+// config
+
+// hooks
 import { useState } from "react";
+
+// context
+
+// components
 
 
 export const useValidateUserInput = () => {

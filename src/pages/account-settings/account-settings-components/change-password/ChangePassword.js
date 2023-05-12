@@ -1,12 +1,20 @@
+// styles
 import styles from '../../AccountSettings.module.css';
 
-import { AuthContext } from '../../../../context/authContext';
+// config
+
+// hooks
 import { useContext } from 'react';
+
+// context
+import { AuthContext } from '../../../../context/authContext';
+
+// components
 import ChangePasswordHasPassword from './ChangePasswordHasPassword';
 import ChangePasswordCreatePassword from './ChangePasswordCreatePassword';
 
 
-const ChangePassword = props => {
+const ChangePassword = () => {
 
     const { user } = useContext(AuthContext);
 
