@@ -299,9 +299,20 @@ So, once the authStateReducer is called by our dispatch function, it checks for 
 { authIsReady: true, hasPassword: true, user: { displayName: 'New Display Name', email: 'rene@rene.com', phoneNumber: '1234' } }
 ```
 
-**CONCLUSION**
+**SECTION CONCLUSION**
 
 This was a hard one to explain. I hope it made sense? I feel that I could have either explained it better or perhaps just assumed more knowledge of the reader and shortened it a bit. If you have any suggestions how to make this clearer, please let me know.
 
 ***
 
+## AUTHENTICATION USER INPUT AND HANDLING ERRORS
+
+In this template the user input we use to authenticate a user or change a users details, happens mostly within the modals. There are many reasons we need to get user input - from signing up to changing the display name - and all of these have their own sets of boundaries and rules they have to follow in order to be valid and accepted into our database. We have this for a few reasons, the main ones being that we don't want to accept something like an email address that isnt really an email address and also security is a big concern. Think of SQL injections, for example. 
+
+**HIGH LEVEL OVERVIEW**
+
+To manage user input state, we are using a reducer within React. We do this because each input has two different values which need to be re-evaluated each time a user changes the value inside of the input. These properties are: the 'userInput.value' and the 'userInput.isValid'. The value property is, let's say the display name, which a user has typed into the input. And the isValid property is a boolean, which uses one of our validator functions, found inside of useValidateUserInput() hook to determine whether or not that entered input is valid. 
+
+So, if the user has typed 'Rene' in as their display name then the 'userInput.value' would be 'Rene'. And by extension since the parameters set on the 'validateDisplayName()' function, which determines the value of 'userInput.isValid', is set to return 'true' only if the entered display name contains just alphabetic characters and is between 1 & 15 characters long, then the 'userInput.isValid' would be 'true'.
+
+These validator functions run on every change event within the associated user input. So, if a user enters 'R' as their display name, then the 'isValid' property will be true. But if they change their mind and hit 'backspace' deleting the 'R' then the empty string now within the user input will mean that the 'isValid' property will be 'false'. Users inherently know they can't have an empty display name and are more than likely about type something new into the field. We don't want to annoy them by having an error message popping up on the screen telling them to do something they're already about to do. So, to largely combat this, there is a small safe guard where the error messages only show up once the forms submit button has been clicked. On the handleSubmit functions there are further safe guards so that the form won't actually submit if its invalid, so don't worry about that. Instead it will prompt the user for the correct information / formatting until the user corrects these errors and submits the form correctly.
